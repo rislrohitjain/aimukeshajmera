@@ -36,7 +36,7 @@ $(document).ready(function() {
     });
 
     // 3. PRODUCT CATALOG PAGINATION & ACTIVE FILTER COLOR SYSTEM
-    const ITEMS_PER_PAGE = 6;
+    let itemsPerPage = 6;
     let currentCategory = 'all';
     let currentPage = 1;
 
@@ -49,9 +49,10 @@ $(document).ready(function() {
     }
 
     function renderPagination() {
+        itemsPerPage = parseInt($('#catalog-page-size').val()) || itemsPerPage;
         const visibleCards = getVisibleCards();
         const totalItems = visibleCards.length;
-        const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE) || 1;
+        const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
 
         if (currentPage > totalPages) currentPage = 1;
 
@@ -59,30 +60,50 @@ $(document).ready(function() {
         $('.product-card').addClass('hidden');
 
         // Show slice for current page
-        const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
-        const endIdx = startIdx + ITEMS_PER_PAGE;
+        const startIdx = (currentPage - 1) * itemsPerPage;
+        const endIdx = startIdx + itemsPerPage;
 
         visibleCards.slice(startIdx, endIdx).removeClass('hidden');
 
-        // Render Pagination Buttons
-        let paginationHTML = '';
+        // Render Pagination Controls HTML with page size selector!
+        let paginationHTML = '<div class="flex flex-col sm:flex-row items-center justify-between gap-4 border border-slate-200 dark:border-slate-800 p-3 rounded-2xl bg-white dark:bg-slate-900 shadow-sm text-xs font-semibold w-full sm:w-auto">';
+        
+        paginationHTML += `
+            <div class="flex items-center gap-2">
+                <span class="text-slate-500 font-bold">प्रति पृष्ठ योजनाएं (Show Rows):</span>
+                <select id="catalog-page-size" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white outline-none">
+                    <option value="2" ${itemsPerPage === 2 ? 'selected' : ''}>2 per page</option>
+                    <option value="5" ${itemsPerPage === 5 ? 'selected' : ''}>5 per page</option>
+                    <option value="6" ${itemsPerPage === 6 ? 'selected' : ''}>6 per page</option>
+                    <option value="10" ${itemsPerPage === 10 ? 'selected' : ''}>10 per page</option>
+                    <option value="100" ${itemsPerPage === 100 ? 'selected' : ''}>100 per page</option>
+                    <option value="1000" ${itemsPerPage === 1000 ? 'selected' : ''}>1000 per page</option>
+                </select>
+            </div>
+        `;
 
         if (totalPages > 1) {
-            // Prev Button
-            paginationHTML += `<button id="plan-prev-btn" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs hover:bg-blue-600 hover:text-white transition ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}"><i class="fas fa-chevron-left mr-1"></i> पिछले</button>`;
+            paginationHTML += '<div class="flex items-center gap-1.5 overflow-x-auto max-w-full">';
+            paginationHTML += `<button id="plan-prev-btn" class="px-3.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold hover:bg-blue-600 hover:text-white transition ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}"><i class="fas fa-chevron-left mr-1"></i> पिछले</button>`;
 
-            // Page Number Pills
             for (let i = 1; i <= totalPages; i++) {
                 const isActive = (i === currentPage);
-                paginationHTML += `<button data-page="${i}" class="plan-page-num w-9 h-9 rounded-xl font-bold text-xs transition ${isActive ? 'bg-blue-600 text-white shadow-md' : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-blue-500'}">${i}</button>`;
+                paginationHTML += `<button data-page="${i}" class="plan-page-num w-8 h-8 rounded-xl font-bold transition ${isActive ? 'bg-blue-600 text-white shadow-md' : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-blue-500'}">${i}</button>`;
             }
 
-            // Next Button
-            paginationHTML += `<button id="plan-next-btn" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs hover:bg-blue-600 hover:text-white transition ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}">अगले <i class="fas fa-chevron-right ml-1"></i></button>`;
+            paginationHTML += `<button id="plan-next-btn" class="px-3.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold hover:bg-blue-600 hover:text-white transition ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}">अगले <i class="fas fa-chevron-right ml-1"></i></button>`;
+            paginationHTML += '</div>';
         }
+
+        paginationHTML += '</div>';
 
         $('#plan-pagination-controls').html(paginationHTML);
     }
+
+    $(document).on('change', '#catalog-page-size', function() {
+        currentPage = 1;
+        renderPagination();
+    });
 
     // Filter Tab Button Click Handler (Active Color Highlight)
     $('.filter-btn').on('click', function() {
