@@ -15,8 +15,8 @@ def login():
         password = request.form.get('password', '').strip()
         action = request.form.get('action', 'login')
 
-        if not phone:
-            flash('कृपया अपना मोबाइल नंबर दर्ज करें।', 'danger')
+        if not phone or not password:
+            flash('कृपया अपना 10-अंकों का मोबाइल नंबर और पासवर्ड दर्ज करें।', 'danger')
             return redirect(url_for('auth.login'))
 
         user = User.query.filter_by(phone=phone).first()
@@ -32,8 +32,7 @@ def login():
                 name=f"User_{phone[-4:]}",
                 role='admin' if phone == '9829943216' else 'user'
             )
-            reg_password = password if password else phone
-            user.set_password(reg_password)
+            user.set_password(password)
             db.session.add(user)
             db.session.commit()
             
@@ -43,18 +42,17 @@ def login():
 
         # Login action
         if not user:
-            # Auto register for convenience
+            # Auto register new user with specified password
             user = User(
                 phone=phone,
                 name=f"User_{phone[-4:]}",
                 role='admin' if phone == '9829943216' else 'user'
             )
-            login_password = password if password else phone
-            user.set_password(login_password)
+            user.set_password(password)
             db.session.add(user)
             db.session.commit()
 
-        if user.check_password(password) or user.check_password(phone):
+        if user.check_password(password):
             login_user(user, remember=True)
             flash(f'स्वागत है {user.name or user.phone}!', 'success')
             if user.role == 'admin':

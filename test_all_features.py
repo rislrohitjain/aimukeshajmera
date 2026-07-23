@@ -19,13 +19,23 @@ class MukeshAjmeraAppTestCase(unittest.TestCase):
             print("OK - Test 01 Passed: 10 LIC + 10 Post Office plans pre-seeded successfully.")
 
     def test_02_mobile_auth(self):
+        # 1. Missing password test (must fail/flash alert)
+        res_no_pass = self.client.post('/login', data={'phone': '9876543210', 'password': ''}, follow_redirects=True)
+        self.assertIn('पासवर्ड', res_no_pass.get_data(as_text=True))
+
+        # 2. Register user with mandatory password
         res = self.client.post('/login', data={
             'phone': '9876543210',
             'password': 'Password123',
             'action': 'register'
         }, follow_redirects=True)
         self.assertEqual(res.status_code, 200)
-        print("OK - Test 02 Passed: Mobile user registration/login verified for phone 9876543210.")
+
+        # 3. Wrong password login attempt (must fail)
+        res_wrong = self.client.post('/login', data={'phone': '9876543210', 'password': 'WrongPassword'}, follow_redirects=True)
+        self.assertIn('गलत पासवर्ड', res_wrong.get_data(as_text=True))
+
+        print("OK - Test 02 Passed: Mobile user mandatory password registration and strict password verification passed.")
 
     def test_03_profile_update(self):
         with self.client:
