@@ -242,8 +242,8 @@ function exportTableToExcel(tableId, filename) {
     }
 }
 
-// Universal Client-Side Table Paginator (Supports 2, 5, 10, 100, 1000 items per page)
-function initTablePagination(tableId, pageSizeSelectId, infoId, prevBtnId, nextBtnId) {
+// Universal Client-Side Table Paginator (Supports 2, 5, 10, 100, 1000 items per page & page numbers)
+function initTablePagination(tableId, pageSizeSelectId, infoId, prevBtnId, nextBtnId, numbersContainerId) {
     const $table = $('#' + tableId);
     if (!$table.length) return;
 
@@ -251,12 +251,16 @@ function initTablePagination(tableId, pageSizeSelectId, infoId, prevBtnId, nextB
     let pageSize = parseInt($('#' + pageSizeSelectId).val()) || 10;
 
     function renderTablePage() {
-        const $rows = $table.find('tbody tr');
+        $table.find('tbody tr.filtered-out').addClass('hidden');
+        const $rows = $table.find('tbody tr:not(.filtered-out)');
         const totalRows = $rows.length;
         if (totalRows === 0) {
             $('#' + infoId).text('No records found');
             $('#' + prevBtnId).prop('disabled', true);
             $('#' + nextBtnId).prop('disabled', true);
+            if (numbersContainerId && $('#' + numbersContainerId).length) {
+                $('#' + numbersContainerId).empty();
+            }
             return;
         }
 
@@ -280,22 +284,38 @@ function initTablePagination(tableId, pageSizeSelectId, infoId, prevBtnId, nextB
 
         $('#' + prevBtnId).prop('disabled', currentPage === 1);
         $('#' + nextBtnId).prop('disabled', currentPage >= totalPages);
+
+        if (numbersContainerId && $('#' + numbersContainerId).length) {
+            let numHtml = '';
+            for (let i = 1; i <= totalPages; i++) {
+                const activeCls = (i === currentPage) ? 'bg-emerald-600 text-white font-bold shadow' : 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 hover:bg-emerald-500 hover:text-white';
+                numHtml += `<button data-page="${i}" class="table-page-num-btn px-2.5 py-1 rounded-lg text-xs font-bold transition ${activeCls}">${i}</button>`;
+            }
+            $('#' + numbersContainerId).html(numHtml);
+        }
     }
 
-    $('#' + pageSizeSelectId).on('change', function() {
+    if (numbersContainerId) {
+        $(document).off('click', '#' + numbersContainerId + ' .table-page-num-btn').on('click', '#' + numbersContainerId + ' .table-page-num-btn', function() {
+            currentPage = parseInt($(this).data('page'));
+            renderTablePage();
+        });
+    }
+
+    $('#' + pageSizeSelectId).off('change.tblpag').on('change.tblpag', function() {
         pageSize = parseInt($(this).val()) || 10;
         currentPage = 1;
         renderTablePage();
     });
 
-    $('#' + prevBtnId).on('click', function() {
+    $('#' + prevBtnId).off('click.tblpag').on('click.tblpag', function() {
         if (currentPage > 1) {
             currentPage--;
             renderTablePage();
         }
     });
 
-    $('#' + nextBtnId).on('click', function() {
+    $('#' + nextBtnId).off('click.tblpag').on('click.tblpag', function() {
         const totalRows = $table.find('tbody tr').length;
         const totalPages = Math.ceil(totalRows / pageSize) || 1;
         if (currentPage < totalPages) {
@@ -305,5 +325,53 @@ function initTablePagination(tableId, pageSizeSelectId, infoId, prevBtnId, nextB
     });
 
     renderTablePage();
+}
+
+// Universal Table Search & Category Filter Engine
+function initTableFilter(tableId, searchInputId, dropdownSelectors, onFilterCallback) {
+    const $table = $('#' + tableId);
+    if (!$table.length) return;
+
+    function filterRows() {
+        const query = ($('#' + searchInputId).val() || '').toLowerCase().trim();
+
+        $table.find('tbody tr').each(function() {
+            const $row = $(this);
+            const rowText = $row.text().toLowerCase();
+            let showRow = true;
+
+            if (query && rowText.indexOf(query) === -1) {
+                showRow = false;
+            }
+
+            if (showRow && dropdownSelectors && dropdownSelectors.length) {
+                dropdownSelectors.forEach(function(sel) {
+                    const filterVal = ($(sel).val() || '').toLowerCase().trim();
+                    if (filterVal && filterVal !== 'all') {
+                        if (rowText.indexOf(filterVal) === -1) {
+                            showRow = false;
+                        }
+                    }
+                });
+            }
+
+            if (showRow) {
+                $row.removeClass('filtered-out');
+            } else {
+                $row.addClass('filtered-out hidden');
+            }
+        });
+
+        if (typeof onFilterCallback === 'function') {
+            onFilterCallback();
+        }
+    }
+
+    $('#' + searchInputId).on('keyup input', filterRows);
+    if (dropdownSelectors && dropdownSelectors.length) {
+        dropdownSelectors.forEach(function(sel) {
+            $(sel).on('change', filterRows);
+        });
+    }
 }
 

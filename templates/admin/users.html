@@ -3,22 +3,81 @@
 {% block title %}Registered Users & Advisory Leads | Mukesh Ajmera Admin{% endblock %}
 
 {% block content %}
-<section class="py-12 hero-gradient-bg border-b border-slate-200 dark:border-slate-800">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between">
-      <div>
-        <span class="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-wider">User Directory & Smart Advisory Engine</span>
-        <h1 class="text-3xl font-black text-slate-900 dark:text-white mt-1">Registered Clients & Advisory Leads</h1>
-      </div>
-      <a href="{{ url_for('admin.dashboard') }}" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs hover:bg-slate-300 transition">
-        <i class="fas fa-arrow-left mr-1"></i> Back to Dashboard
-      </a>
-    </div>
-  </div>
-</section>
+<div class="min-h-screen flex flex-col lg:flex-row bg-slate-50 dark:bg-slate-950">
+  
+  <!-- ADMIN LEFT NAVIGATION SIDEBAR -->
+  {% include 'components/admin_sidebar.html' %}
 
-<section class="py-12">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+  <!-- MAIN USERS LIST BODY CONTENT -->
+  <div class="flex-1 min-w-0" id="users-section">
+    <section class="py-10 hero-gradient-bg border-b border-slate-200 dark:border-slate-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-wider">User Directory & Smart Advisory Engine</span>
+            <h1 class="text-3xl font-black text-slate-900 dark:text-white mt-1">Registered Clients & Advisory Leads</h1>
+          </div>
+          <a href="{{ url_for('admin.dashboard') }}" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs hover:bg-slate-300 transition">
+            <i class="fas fa-arrow-left mr-1"></i> Back to Dashboard
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+
+    <!-- TODAY'S CLIENT BIRTHDAYS WIDGET -->
+    <div id="birthdays-section" class="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/5 dark:from-slate-900 dark:to-amber-950/40 rounded-3xl p-8 border-2 border-amber-400/50 dark:border-amber-600/40 shadow-xl space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-200 dark:border-amber-900/60 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-2xl font-bold shadow-md animate-bounce">
+            <i class="fas fa-birthday-cake"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+              🎉 Today's Client & Lead Birthdays
+              <span class="px-3 py-0.5 rounded-full bg-amber-500 text-white text-xs font-black shadow">{{ today_birthdays|length }}</span>
+            </h2>
+            <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Clients celebrating their birthday today! Contact details visible exclusively in admin panel.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="bday-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for bday in today_birthdays %}
+          <div class="bday-card-item p-5 rounded-2xl bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-800 shadow-md flex flex-col justify-between space-y-3 transform hover:-translate-y-1 transition">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-900/60 text-amber-900 dark:text-amber-300">{{ bday.type }}</span>
+                <h3 class="text-sm font-bold text-slate-900 dark:text-white mt-1">{{ bday.name }}</h3>
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-300 block mt-1"><i class="fas fa-phone-alt text-emerald-500 mr-1"></i> +91 {{ bday.phone }}</span>
+                <span class="text-[11px] text-slate-500 block mt-0.5"><i class="fas fa-map-marker-alt text-red-400 mr-1"></i> {{ bday.location }}</span>
+              </div>
+              <span class="text-3xl">🎂</span>
+            </div>
+            
+            <a href="https://wa.me/91{{ bday.phone }}?text=🎂%20Happy%20Birthday%20{{ bday.name|urlencode }}!%20Wish%20you%20good%20health,%20happiness%20and%20prosperity.%20Best%20regards,%20Mukesh%20Ajmera%20LIC%20%26%20Post%20Office%20Sarwar." target="_blank" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-2">
+              <i class="fab fa-whatsapp text-sm"></i> Wish Happy Birthday on WhatsApp
+            </a>
+          </div>
+        {% else %}
+          <div class="col-span-3 p-6 text-center text-xs font-semibold text-slate-500 bg-white/60 dark:bg-slate-900/60 rounded-2xl border border-dashed border-amber-300 dark:border-amber-900">
+            🎈 No client birthdays recorded for today.
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Birthday Pagination Controls -->
+      {% if today_birthdays %}
+        <div id="bday-pagination-controls" class="mt-6 pt-4 border-t border-amber-200 dark:border-amber-900/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div id="bday-pagination-info" class="text-xs font-bold text-slate-700 dark:text-slate-300">
+            Showing 1 to {{ today_birthdays|length if today_birthdays|length < 6 else 6 }} of {{ today_birthdays|length }} Birthdays
+          </div>
+          <div id="bday-pagination-buttons" class="flex items-center gap-1.5 flex-wrap"></div>
+        </div>
+      {% endif %}
+    </div>
 
     <!-- Registered Users Directory -->
     <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
@@ -38,6 +97,20 @@
         </button>
       </div>
 
+      <!-- Search & Filter Controls Toolbar for Users -->
+      <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 bg-slate-50 dark:bg-slate-800/40 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
+        <div class="sm:col-span-8">
+          <input type="text" id="users-search-input" placeholder="🔍 Search registered users by Name, Phone (+91), or Location..." class="w-full px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-semibold">
+        </div>
+        <div class="sm:col-span-4">
+          <select id="users-filter-role" class="w-full px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white outline-none">
+            <option value="all">All Account Roles</option>
+            <option value="user">USER Role</option>
+            <option value="admin">ADMIN Role</option>
+          </select>
+        </div>
+      </div>
+
       <!-- Pagination & Row Count Control Bar -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
         <div class="flex items-center gap-2">
@@ -53,8 +126,9 @@
 
         <div class="flex items-center gap-3">
           <div id="users-page-info" class="text-slate-500 font-medium">Page 1 of 1</div>
-          <div class="flex items-center gap-1">
+          <div class="flex items-center gap-1.5">
             <button id="users-prev-btn" class="px-3 py-1 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white font-bold disabled:opacity-50 transition">Prev</button>
+            <div id="users-page-numbers" class="flex items-center gap-1"></div>
             <button id="users-next-btn" class="px-3 py-1 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white font-bold disabled:opacity-50 transition">Next</button>
           </div>
         </div>
@@ -101,47 +175,172 @@
     </div>
 
 
-    <!-- Smart Assistant Query Logs & Leads -->
+    <!-- Smart Assistant Query Logs & Advisory Leads Table -->
     <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
-      <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
-        <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-lg font-bold">
-          <i class="fas fa-comments"></i>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center text-lg font-bold">
+            <i class="fas fa-comments"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Recent Smart Assistant Query Logs & Leads ({{ chat_logs|length }})</h2>
+            <p class="text-xs text-slate-500">Track questions asked to LIC MITRA by visitors with Excel export and pagination.</p>
+          </div>
         </div>
-        <div>
-          <h2 class="text-xl font-bold text-slate-900 dark:text-white">Recent Smart Assistant Query Logs & Leads</h2>
-          <p class="text-xs text-slate-500">Track questions asked to LIC MITRA by visitors.</p>
+
+        <button onclick="exportTableToExcel('chats-table', 'AI_Chat_Logs_Mukesh_Ajmera.xlsx')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition inline-flex items-center gap-1.5 self-start sm:self-center">
+          <i class="fas fa-file-excel text-sm"></i> Export to Excel (.xlsx)
+        </button>
+      </div>
+
+      <!-- Search Control Bar for Chat Query Logs -->
+      <div class="bg-slate-50 dark:bg-slate-800/40 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
+        <input type="text" id="chats-search-input" placeholder="🔍 Search AI queries by User Question, Mobile Number, or Location..." class="w-full px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-semibold">
+      </div>
+
+      <!-- Pagination & Row Count Control Bar for Chat Logs -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
+        <div class="flex items-center gap-2">
+          <label class="font-bold text-slate-700 dark:text-slate-300">Show Rows:</label>
+          <select id="chats-page-size" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white outline-none">
+            <option value="2">2 per page</option>
+            <option value="5">5 per page</option>
+            <option value="10" selected>10 per page</option>
+            <option value="100">100 per page</option>
+            <option value="1000">1000 per page</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div id="chats-page-info" class="text-slate-500 font-medium">Page 1 of 1</div>
+          <div class="flex items-center gap-1.5">
+            <button id="chats-prev-btn" class="px-3 py-1 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white font-bold disabled:opacity-50 transition">Prev</button>
+            <div id="chats-page-numbers" class="flex items-center gap-1"></div>
+            <button id="chats-next-btn" class="px-3 py-1 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white font-bold disabled:opacity-50 transition">Next</button>
+          </div>
         </div>
       </div>
 
-      <div class="space-y-3">
-        {% for chat in chat_logs %}
-          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs space-y-2">
-            <div class="flex justify-between items-center text-slate-500 font-semibold text-[11px]">
-              <span><i class="fas fa-user text-blue-600 mr-1"></i> {{ chat.user_phone }} • {{ chat.user_location }}</span>
-              <span><i class="far fa-clock mr-1"></i> {{ chat.created_at.strftime('%Y-%m-%d %H:%M') if chat.created_at else '' }}</span>
-            </div>
-            <div>
-              <strong class="text-slate-900 dark:text-white">User Question:</strong>
-              <p class="text-slate-700 dark:text-slate-300 font-medium">{{ chat.message }}</p>
-            </div>
-            <div class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-600 dark:text-slate-400">
-              <strong class="text-blue-600 dark:text-blue-400">Smart Advisor Response:</strong> {{ chat.response }}
-            </div>
-          </div>
-        {% else %}
-          <p class="text-center py-6 text-slate-500 text-xs">No chat logs recorded yet.</p>
-        {% endfor %}
+      <div class="overflow-x-auto">
+        <table id="chats-table" class="w-full text-left text-xs text-slate-700 dark:text-slate-300">
+          <thead class="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-bold uppercase text-[10px]">
+            <tr>
+              <th class="p-3">ID</th>
+              <th class="p-3">Client Mobile / Location</th>
+              <th class="p-3">User Question</th>
+              <th class="p-3">Smart Advisor Response</th>
+              <th class="p-3">Timestamp</th>
+              <th class="p-3">WhatsApp Reply</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+            {% for chat in chat_logs %}
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                <td class="p-3 font-bold">#{{ chat.id }}</td>
+                <td class="p-3 font-bold text-slate-900 dark:text-white">
+                  +91 {{ chat.user_phone }}
+                  <span class="block text-[10px] text-slate-500 font-normal"><i class="fas fa-map-marker-alt text-red-400 mr-1"></i>{{ chat.user_location or 'Sarwar' }}</span>
+                </td>
+                <td class="p-3 max-w-xs font-semibold text-slate-900 dark:text-white">
+                  {{ chat.message }}
+                </td>
+                <td class="p-3 max-w-md text-slate-600 dark:text-slate-400 font-medium">
+                  {{ chat.response }}
+                </td>
+                <td class="p-3 text-slate-500 whitespace-nowrap">
+                  {{ chat.created_at.strftime('%Y-%m-%d %H:%M') if chat.created_at else '' }}
+                </td>
+                <td class="p-3">
+                  <a href="https://wa.me/91{{ chat.user_phone }}?text=Hi,%20regarding%20your%20question:%20%22{{ chat.message|urlencode }}%22" target="_blank" class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-600 hover:text-white text-emerald-800 rounded-lg font-bold text-[10px] transition inline-flex items-center gap-1">
+                    <i class="fab fa-whatsapp"></i> Reply
+                  </a>
+                </td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="6" class="p-4 text-center text-slate-500">No chat query logs recorded yet.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
     </div>
 
   </div>
 </section>
+  </div> <!-- End Main Content Area -->
+</div> <!-- End Admin Flex Layout Wrapper -->
 {% endblock %}
 
 {% block scripts %}
 <script>
+function initBirthdayPagination() {
+  const cards = document.querySelectorAll('#bday-grid .bday-card-item');
+  const totalItems = cards.length;
+  if (totalItems === 0) return;
+
+  const itemsPerPage = 6;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  let currentPage = 1;
+
+  function showPage(page) {
+    currentPage = page;
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+
+    cards.forEach((card, index) => {
+      if (index >= start && index < end) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    const infoEl = document.getElementById('bday-pagination-info');
+    if (infoEl) {
+      const displayEnd = Math.min(end, totalItems);
+      infoEl.innerHTML = `Showing <strong>${start + 1}–${displayEnd}</strong> of <strong>${totalItems}</strong> Today's Birthdays (Page <strong>${currentPage}</strong> of <strong>${totalPages}</strong>)`;
+    }
+
+    const btnContainer = document.getElementById('bday-pagination-buttons');
+    if (btnContainer) {
+      if (totalPages <= 1) {
+        btnContainer.innerHTML = '';
+        return;
+      }
+      let html = '';
+      html += `<button type="button" onclick="changeBdayPage(${currentPage - 1})" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 ${currentPage === 1 ? 'opacity-40 cursor-not-allowed bg-slate-200 dark:bg-slate-800 text-slate-400' : 'bg-amber-500 hover:bg-amber-600 text-white shadow'}" ${currentPage === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left text-[10px]"></i> Prev</button>`;
+      
+      for (let i = 1; i <= totalPages; i++) {
+        html += `<button type="button" onclick="changeBdayPage(${i})" class="px-3 py-1.5 rounded-xl text-xs font-bold transition ${i === currentPage ? 'bg-amber-600 text-white shadow-md ring-2 ring-amber-400' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'}">${i}</button>`;
+      }
+
+      html += `<button type="button" onclick="changeBdayPage(${currentPage + 1})" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 ${currentPage === totalPages ? 'opacity-40 cursor-not-allowed bg-slate-200 dark:bg-slate-800 text-slate-400' : 'bg-amber-500 hover:bg-amber-600 text-white shadow'}" ${currentPage === totalPages ? 'disabled' : ''}>Next <i class="fas fa-chevron-right text-[10px]"></i></button>`;
+
+      btnContainer.innerHTML = html;
+    }
+  }
+
+  window.changeBdayPage = function(page) {
+    if (page < 1 || page > totalPages) return;
+    showPage(page);
+  };
+
+  showPage(1);
+}
+
 $(document).ready(function() {
-    initTablePagination('users-table', 'users-page-size', 'users-page-info', 'users-prev-btn', 'users-next-btn');
+    initBirthdayPagination();
+
+    initTablePagination('users-table', 'users-page-size', 'users-page-info', 'users-prev-btn', 'users-next-btn', 'users-page-numbers');
+    initTableFilter('users-table', 'users-search-input', ['#users-filter-role'], function() {
+        initTablePagination('users-table', 'users-page-size', 'users-page-info', 'users-prev-btn', 'users-next-btn', 'users-page-numbers');
+    });
+
+    initTablePagination('chats-table', 'chats-page-size', 'chats-page-info', 'chats-prev-btn', 'chats-next-btn', 'chats-page-numbers');
+    initTableFilter('chats-table', 'chats-search-input', [], function() {
+        initTablePagination('chats-table', 'chats-page-size', 'chats-page-info', 'chats-prev-btn', 'chats-next-btn', 'chats-page-numbers');
+    });
 });
 </script>
 {% endblock %}

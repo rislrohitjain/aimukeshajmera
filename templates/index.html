@@ -17,29 +17,34 @@
             {% for banner in banners %}
               <div class="banner-slide absolute inset-0 transition-opacity duration-700 ease-in-out bg-gradient-to-br from-slate-900 via-blue-950 to-red-950 flex flex-col justify-end p-6 {% if loop.first %}opacity-100 z-10{% else %}opacity-0 z-0{% endif %}" data-index="{{ loop.index0 }}">
                 
-                <!-- Background Image with onerror Fallback -->
-                <img src="{{ banner.image_url }}" alt="{{ banner.caption or 'मुकेश अजमेरा सेवाएं' }}" class="absolute inset-0 w-full h-full object-cover z-0" onerror="this.style.display='none';">
+                <!-- Background Image with SVG Fallback on Image Load Failure -->
+                <img src="{{ banner.image_url }}" alt="{{ banner.caption or 'मुकेश अजमेरा सेवाएं' }}" class="absolute inset-0 w-full h-full object-cover z-0" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'800\' height=\'600\' viewBox=\'0 0 800 600\'><defs><linearGradient id=\'g\' x1=\'0%\' y1=\'0%\' x2=\'100%\' y2=\'100%\'><stop offset=\'0%\' stop-color=\'%231e3a8a\'/><stop offset=\'50%\' stop-color=\'%230f172a\'/><stop offset=\'100%\' stop-color=\'%23991b1b\'/></linearGradient></defs><rect width=\'800\' height=\'600\' fill=\'url(%23g)\'/><text x=\'50%\' y=\'45%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23fbbf24\' font-family=\'sans-serif\' font-size=\'28\' font-weight=\'900\'>MUKESH AJMERA</text><text x=\'50%\' y=\'55%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23ffffff\' font-family=\'sans-serif\' font-size=\'18\' font-weight=\'bold\'>LIC %26 POST OFFICE SERVICES</text></svg>';">
                 
                 <!-- Overlay Gradient Card -->
-                <div class="relative z-10 p-5 rounded-2xl bg-slate-950/85 backdrop-blur-md border border-white/10 shadow-xl space-y-2">
-                  <span class="inline-block px-3 py-1 rounded-full bg-yellow-400 text-slate-950 font-black text-[10px] uppercase tracking-wider">
+                <div class="relative z-10 p-5 rounded-2xl bg-slate-950/40 backdrop-blur-lg border border-white/20 shadow-2xl space-y-2">
+                  <span class="inline-block px-3 py-1 rounded-full bg-yellow-400 text-slate-950 font-black text-[10px] uppercase tracking-wider shadow-sm">
                     ⭐ मुकेश अजमेरा सरवाड़ (स्लाइड {{ loop.index }}/{{ banners|length }})
                   </span>
-                  <p class="text-white font-bold text-sm leading-snug drop-shadow-md">
+                  <p class="text-white font-bold text-sm sm:text-base leading-snug drop-shadow-md">
                     {{ banner.caption or 'सुरक्षित भविष्य एवं उच्च रिटर्न - मुकेश अजमेरा एलआईसी सरवाड़' }}
                   </p>
-                  <p class="text-[11px] text-slate-300">📞 संपर्क: +91 98299 43216 • भिमेश्वर महादेव के पास, सरवाड़</p>
+                  {% if banner.description %}
+                    <p class="text-xs text-slate-200 font-medium leading-relaxed drop-shadow-sm">
+                      {{ banner.description }}
+                    </p>
+                  {% endif %}
+                  <p class="text-xs text-yellow-300 font-bold pt-1.5 border-t border-white/20 drop-shadow-sm">📞 संपर्क: +91 98299 43216 • भिमेश्वर महादेव मंदिर के पास, सरवाड़</p>
                 </div>
 
               </div>
             {% else %}
               <div class="banner-slide absolute inset-0 opacity-100 z-10 bg-gradient-to-br from-slate-900 via-blue-950 to-red-950 flex flex-col justify-end p-6">
-                <div class="relative z-10 p-5 rounded-2xl bg-slate-950/85 backdrop-blur-md border border-white/10 shadow-xl space-y-2">
-                  <span class="inline-block px-3 py-1 rounded-full bg-yellow-400 text-slate-950 font-black text-[10px] uppercase tracking-wider">
+                <div class="relative z-10 p-5 rounded-2xl bg-slate-950/40 backdrop-blur-lg border border-white/20 shadow-2xl space-y-2">
+                  <span class="inline-block px-3 py-1 rounded-full bg-yellow-400 text-slate-950 font-black text-[10px] uppercase tracking-wider shadow-sm">
                     ⭐ मुकेश अजमेरा सरवाड़
                   </span>
-                  <p class="text-white font-bold text-sm leading-snug">सुरक्षित भविष्य एवं उच्च रिटर्न - मुकेश अजमेरा एलआईसी सरवाड़</p>
-                  <p class="text-[11px] text-slate-300">📞 संपर्क: +91 98299 43216</p>
+                  <p class="text-white font-bold text-sm sm:text-base leading-snug drop-shadow-md">सुरक्षित भविष्य एवं उच्च रिटर्न - मुकेश अजमेरा एलआईसी सरवाड़</p>
+                  <p class="text-xs text-yellow-300 font-bold pt-1.5 border-t border-white/20 drop-shadow-sm">📞 संपर्क: +91 98299 43216</p>
                 </div>
               </div>
             {% endfor %}
@@ -98,7 +103,7 @@
         </div>
 
         <!-- Trust Badges -->
-        <div class="pt-6 grid grid-cols-3 gap-4 border-t border-slate-200 dark:border-slate-800 text-center">
+        <div class="pt-6 grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-slate-200 dark:border-slate-800 text-center">
           <div>
             <span class="block text-2xl font-extrabold text-blue-700 dark:text-blue-400">100%</span>
             <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">सरकारी सुरक्षा (Sovereign)</span>
@@ -110,6 +115,10 @@
           <div>
             <span class="block text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">Sec 80C</span>
             <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">100% टैक्स छूट</span>
+          </div>
+          <div>
+            <span class="block text-2xl font-extrabold text-amber-500 dark:text-amber-400">{{ visitor_count }}</span>
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">👁️ कुल विज‍िटर्स (Visitors)</span>
           </div>
         </div>
 
@@ -479,8 +488,8 @@
             <i class="fas fa-map-marker-alt text-red-500 text-lg mt-0.5"></i>
             <div>
               <strong class="block text-slate-900 dark:text-white">सरवाड़ कार्यालय पता (Sarwar Office Address):</strong>
-              <span class="text-slate-600 dark:text-slate-300">भिमेश्वर महादेव के पास, दादा बाड़ी के पास, सरवाड़, राजस्थान 305403</span>
-              <span class="block text-[11px] text-slate-400 mt-0.5">(Near Bhimeshwar Mahadev, Dada Badi Ke Pass, Sarwar, Rajasthan 305403)</span>
+              <span class="text-slate-600 dark:text-slate-300">भिमेश्वर महादेव मंदिर के पास, दादा बाड़ी के पास, सरवाड़ (अजमेर) 305403</span>
+              <span class="block text-[11px] text-slate-400 mt-0.5">(Near Bhimeshwar Mahadev Temple, Dada Badi Ke Pass, Sarwar, Rajasthan 305403)</span>
             </div>
           </div>
 

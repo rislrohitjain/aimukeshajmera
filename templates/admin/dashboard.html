@@ -3,8 +3,15 @@
 {% block title %}Graphical Admin Dashboard | Mukesh Ajmera Control Center{% endblock %}
 
 {% block content %}
-<section class="py-12 hero-gradient-bg border-b border-slate-200 dark:border-slate-800">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen flex flex-col lg:flex-row bg-slate-50 dark:bg-slate-950">
+  
+  <!-- ADMIN LEFT NAVIGATION SIDEBAR (Exclusively for Admin) -->
+  {% include 'components/admin_sidebar.html' %}
+
+  <!-- MAIN ADMIN DASHBOARD BODY CONTENT -->
+  <div class="flex-1 min-w-0" id="admin-overview">
+    <section class="py-10 hero-gradient-bg border-b border-slate-200 dark:border-slate-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         <span class="px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-bold uppercase tracking-wider">Graphical Analytics & Control Center</span>
@@ -17,57 +24,198 @@
       </div>
     </div>
 
-    <!-- Quick Stats Metric Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-      <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
-        <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400 flex items-center justify-center text-xl font-bold">
+    <!-- Quick Stats Metric Cards with Section Links -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mt-8">
+      <a href="#products-section" class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3 hover:border-blue-500 hover:shadow-md transition transform hover:-translate-y-0.5">
+        <div class="w-10 h-10 rounded-2xl bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400 flex items-center justify-center text-lg font-bold">
           <i class="fas fa-shield-alt"></i>
         </div>
         <div>
-          <span class="block text-2xl font-black text-slate-900 dark:text-white">{{ stats.products }}</span>
-          <span class="text-xs font-semibold text-slate-500">Active Schemes</span>
+          <span class="block text-xl font-black text-slate-900 dark:text-white">{{ stats.products }}</span>
+          <span class="text-[11px] font-semibold text-slate-500 flex items-center gap-1">Active Schemes <i class="fas fa-arrow-down text-[9px] text-blue-500"></i></span>
         </div>
-      </div>
+      </a>
 
-      <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
-        <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400 flex items-center justify-center text-xl font-bold">
+      <a href="#leads-section" class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3 hover:border-emerald-500 hover:shadow-md transition transform hover:-translate-y-0.5">
+        <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400 flex items-center justify-center text-lg font-bold">
           <i class="fas fa-address-book"></i>
         </div>
         <div>
-          <span class="block text-2xl font-black text-slate-900 dark:text-white">{{ stats.leads }}</span>
-          <span class="text-xs font-semibold text-slate-500">Contact Form Leads</span>
+          <span class="block text-xl font-black text-slate-900 dark:text-white">{{ stats.leads }}</span>
+          <span class="text-[11px] font-semibold text-slate-500 flex items-center gap-1">Contact Leads <i class="fas fa-arrow-down text-[9px] text-emerald-500"></i></span>
         </div>
-      </div>
+      </a>
 
-      <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
-        <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400 flex items-center justify-center text-xl font-bold">
+      <a href="#analytics-section" class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3 hover:border-indigo-500 hover:shadow-md transition transform hover:-translate-y-0.5">
+        <div class="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400 flex items-center justify-center text-lg font-bold">
+          <i class="fas fa-eye"></i>
+        </div>
+        <div>
+          <span class="block text-xl font-black text-slate-900 dark:text-white">{{ stats.visitors }}</span>
+          <span class="text-[11px] font-semibold text-slate-500 flex items-center gap-1">Website Visitors <i class="fas fa-arrow-down text-[9px] text-indigo-500"></i></span>
+        </div>
+      </a>
+
+      <a href="#banners-section" class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3 hover:border-amber-500 hover:shadow-md transition transform hover:-translate-y-0.5">
+        <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400 flex items-center justify-center text-lg font-bold">
           <i class="fas fa-images"></i>
         </div>
         <div>
-          <span class="block text-2xl font-black text-slate-900 dark:text-white">{{ banners|length }}</span>
-          <span class="text-xs font-semibold text-slate-500">Slider Banners</span>
+          <span class="block text-xl font-black text-slate-900 dark:text-white">{{ banners|length }}</span>
+          <span class="text-[11px] font-semibold text-slate-500 flex items-center gap-1">Slider Banners <i class="fas fa-arrow-down text-[9px] text-amber-500"></i></span>
         </div>
-      </div>
+      </a>
 
-      <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
-        <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 dark:bg-purple-900/50 dark:text-purple-400 flex items-center justify-center text-xl font-bold">
+      <a href="#ai-settings-section" class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3 hover:border-purple-500 hover:shadow-md transition transform hover:-translate-y-0.5">
+        <div class="w-10 h-10 rounded-2xl bg-purple-100 text-purple-600 dark:bg-purple-900/50 dark:text-purple-400 flex items-center justify-center text-lg font-bold">
           <i class="fas fa-brain"></i>
         </div>
         <div>
-          <span class="block text-sm font-black uppercase text-purple-600 dark:text-purple-400">{{ ai_setting.active_provider }}</span>
-          <span class="text-xs font-semibold text-slate-500">Smart Engine</span>
+          <span class="block text-xs font-black uppercase text-purple-600 dark:text-purple-400 truncate max-w-[100px]">{{ ai_setting.active_provider }}</span>
+          <span class="text-[11px] font-semibold text-slate-500 flex items-center gap-1">Smart Engine <i class="fas fa-arrow-down text-[9px] text-purple-500"></i></span>
         </div>
-      </div>
+      </a>
     </div>
   </div>
 </section>
 
+<section class="py-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
 
-<section class="py-12">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <!-- GRAPHICAL ANALYTICS CHARTS & LIVE ACTIVITY STREAM DASHBOARD SECTION -->
+    <div id="analytics-section" class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+      <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 text-white flex items-center justify-center text-lg font-bold shadow-md">
+          <i class="fas fa-chart-pie"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">Graphical Analytics & Live User Activity Overview</h2>
+          <p class="text-xs text-slate-500">Real-time metrics visualization and user engagement activity audit feed.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
+          <h3 class="text-xs font-bold text-slate-900 dark:text-white mb-3 text-center uppercase tracking-wider">LIC vs Post Office Schemes</h3>
+          <div class="relative max-h-[180px]">
+            <canvas id="categoryChart"></canvas>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
+          <h3 class="text-xs font-bold text-slate-900 dark:text-white mb-3 text-center uppercase tracking-wider">Clients & Consultation Leads</h3>
+          <div class="relative max-h-[180px]">
+            <canvas id="leadsChart"></canvas>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
+          <h3 class="text-xs font-bold text-slate-900 dark:text-white mb-3 text-center uppercase tracking-wider">Smart Assistant Query Volume</h3>
+          <div class="relative max-h-[180px]">
+            <canvas id="chatsChart"></canvas>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
+          <h3 class="text-xs font-bold text-slate-900 dark:text-white mb-3 text-center uppercase tracking-wider">Live User Engagement Breakdown</h3>
+          <div class="relative max-h-[180px]">
+            <canvas id="activityChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live User Activity Feed Stream -->
+      <div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800">
+        <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span> Live User Activity & System Audit Feed
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div class="p-3.5 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 flex items-start gap-3">
+            <div class="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
+              <i class="fas fa-users"></i>
+            </div>
+            <div>
+              <strong class="text-slate-900 dark:text-white block">Active Registered Clients</strong>
+              <span class="text-[11px] text-slate-600 dark:text-slate-400">Total <strong>{{ stats.users }}</strong> registered client accounts active in Sarwar directory.</span>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 flex items-start gap-3">
+            <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
+              <i class="fas fa-phone-alt"></i>
+            </div>
+            <div>
+              <strong class="text-slate-900 dark:text-white block">Recent Consultation Requests</strong>
+              <span class="text-[11px] text-slate-600 dark:text-slate-400">Total <strong>{{ stats.leads }}</strong> consultation leads submitted via web portal.</span>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800/60 flex items-start gap-3">
+            <div class="w-8 h-8 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
+              <i class="fas fa-robot"></i>
+            </div>
+            <div>
+              <strong class="text-slate-900 dark:text-white block">LIC MITRA Advisory Queries</strong>
+              <span class="text-[11px] text-slate-600 dark:text-slate-400">Total <strong>{{ stats.chats }}</strong> AI advisory queries processed by {{ ai_setting.active_provider }}.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- TODAY'S CLIENT & LEAD BIRTHDAYS NOTIFICATION WIDGET -->
+    <div id="birthdays-section" class="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/5 dark:from-slate-900 dark:to-amber-950/40 rounded-3xl p-8 border-2 border-amber-400/50 dark:border-amber-600/40 shadow-xl space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-200 dark:border-amber-900/60 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-2xl font-bold shadow-md animate-bounce">
+            <i class="fas fa-birthday-cake"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+              🎉 Today's Client & Lead Birthdays
+              <span class="px-3 py-0.5 rounded-full bg-amber-500 text-white text-xs font-black shadow">{{ today_birthdays|length }}</span>
+            </h2>
+            <p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Clients celebrating their birthday today! Contact details visible exclusively in admin panel.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="bday-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for bday in today_birthdays %}
+          <div class="bday-card-item p-5 rounded-2xl bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-800 shadow-md flex flex-col justify-between space-y-3 transform hover:-translate-y-1 transition">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-900/60 text-amber-900 dark:text-amber-300">{{ bday.type }}</span>
+                <h3 class="text-sm font-bold text-slate-900 dark:text-white mt-1">{{ bday.name }}</h3>
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-300 block mt-1"><i class="fas fa-phone-alt text-emerald-500 mr-1"></i> +91 {{ bday.phone }}</span>
+                <span class="text-[11px] text-slate-500 block mt-0.5"><i class="fas fa-map-marker-alt text-red-400 mr-1"></i> {{ bday.location }}</span>
+              </div>
+              <span class="text-3xl">🎂</span>
+            </div>
+            
+            <a href="https://wa.me/91{{ bday.phone }}?text=🎂%20Happy%20Birthday%20{{ bday.name|urlencode }}!%20Wish%20you%20good%20health,%20happiness%20and%20prosperity.%20Best%20regards,%20Mukesh%20Ajmera%20LIC%20%26%20Post%20Office%20Sarwar." target="_blank" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition flex items-center justify-center gap-2">
+              <i class="fab fa-whatsapp text-sm"></i> Wish Happy Birthday on WhatsApp
+            </a>
+          </div>
+        {% else %}
+          <div class="col-span-3 p-6 text-center text-xs font-semibold text-slate-500 bg-white/60 dark:bg-slate-900/60 rounded-2xl border border-dashed border-amber-300 dark:border-amber-900">
+            🎈 No client birthdays recorded for today.
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Birthday Pagination Controls -->
+      {% if today_birthdays %}
+        <div id="bday-pagination-controls" class="mt-6 pt-4 border-t border-amber-200 dark:border-amber-900/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div id="bday-pagination-info" class="text-xs font-bold text-slate-700 dark:text-slate-300">
+            Showing 1 to {{ today_birthdays|length if today_birthdays|length < 6 else 6 }} of {{ today_birthdays|length }} Birthdays
+          </div>
+          <div id="bday-pagination-buttons" class="flex items-center gap-1.5 flex-wrap"></div>
+        </div>
+      {% endif %}
+    </div>
 
     <!-- BANNER IMAGE SLIDER MANAGEMENT PANEL FOR ADMIN -->
-    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+    <div id="banners-section" class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
       <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
         <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-lg font-bold">
           <i class="fas fa-images"></i>
@@ -78,29 +226,78 @@
         </div>
       </div>
 
-      <form id="add-banner-form" class="grid grid-cols-1 sm:grid-cols-12 gap-3">
-        <div class="sm:col-span-5">
-          <input type="url" name="image_url" placeholder="https://example.com/banner-image.jpg" required class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold">
+      <form id="add-banner-form" class="space-y-4" enctype="multipart/form-data">
+        <input type="hidden" id="add-banner-url-input" name="image_url">
+
+        <!-- Drag & Drop Dropzone Container -->
+        <div id="add-banner-dropzone" class="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 rounded-3xl p-6 text-center cursor-pointer transition-all bg-slate-50/50 dark:bg-slate-800/40 hover:bg-amber-500/5 relative group">
+          <input type="file" id="add-banner-file-input" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
+
+          <!-- Default Dropzone Prompt Content -->
+          <div id="add-banner-drop-content" class="space-y-2 pointer-events-none">
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+              <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <p class="text-xs font-bold text-slate-800 dark:text-slate-200">
+              <span class="text-amber-500 underline font-extrabold">Click to choose image file</span> or drag & drop here
+            </p>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+              Supports PNG, JPG, WEBP, SVG • Max 5MB • Min 400x300px
+            </p>
+          </div>
+
+          <!-- Live Preview State inside Dropzone -->
+          <div id="add-banner-preview-box" class="hidden flex items-center justify-between bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-md relative z-30 pointer-events-auto">
+            <div class="flex items-center gap-3">
+              <img id="add-banner-preview-img" src="" class="w-20 h-14 rounded-xl object-cover border border-slate-200 dark:border-slate-700 shadow-sm" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'800\' height=\'600\' viewBox=\'0 0 800 600\'><rect width=\'800\' height=\'600\' fill=\'%231e3a8a\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23ffffff\' font-family=\'sans-serif\' font-size=\'24\'>Preview</text></svg>';">
+              <div class="text-left">
+                <span id="add-banner-preview-info" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 block">✓ Image Validated</span>
+                <span id="add-banner-preview-size" class="text-[10px] font-semibold text-slate-500 block">Uploaded to server</span>
+              </div>
+            </div>
+            <button type="button" id="remove-add-banner-file" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-xl text-xs font-bold transition">
+              <i class="fas fa-trash-alt mr-1"></i> Change File
+            </button>
+          </div>
         </div>
-        <div class="sm:col-span-5">
-          <input type="text" name="caption" placeholder="Banner Caption / Title" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold">
-        </div>
-        <div class="sm:col-span-2">
-          <button type="submit" class="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl shadow">Add Banner</button>
+
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+          <div class="sm:col-span-5">
+            <input type="text" name="caption" placeholder="Banner Title / Headline (Optional)" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold">
+          </div>
+          <div class="sm:col-span-5">
+            <input type="text" name="description" placeholder="Banner Subtitle / Description (Optional)" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold">
+          </div>
+          <div class="sm:col-span-2">
+            <button type="submit" class="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl shadow flex items-center justify-center gap-1.5 transition">
+              <i class="fas fa-check-circle text-sm"></i> Save Banner
+            </button>
+          </div>
         </div>
       </form>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {% for b in banners %}
           <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center gap-4">
-            <img src="{{ b.image_url }}" alt="Banner" class="w-16 h-16 rounded-xl object-cover border border-slate-200 dark:border-slate-700">
+            <img src="{{ b.image_url }}" alt="Banner" class="w-16 h-16 rounded-xl object-cover border border-slate-200 dark:border-slate-700" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'800\' height=\'600\' viewBox=\'0 0 800 600\'><defs><linearGradient id=\'g\' x1=\'0%\' y1=\'0%\' x2=\'100%\' y2=\'100%\'><stop offset=\'0%\' stop-color=\'%231e3a8a\'/><stop offset=\'50%\' stop-color=\'%230f172a\'/><stop offset=\'100%\' stop-color=\'%23991b1b\'/></linearGradient></defs><rect width=\'800\' height=\'600\' fill=\'url(%23g)\'/><text x=\'50%\' y=\'45%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23fbbf24\' font-family=\'sans-serif\' font-size=\'28\' font-weight=\'900\'>MUKESH AJMERA</text><text x=\'50%\' y=\'55%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23ffffff\' font-family=\'sans-serif\' font-size=\'18\' font-weight=\'bold\'>LIC %26 POST OFFICE SERVICES</text></svg>';">
             <div class="flex-1 overflow-hidden">
               <strong class="text-xs font-bold text-slate-900 dark:text-white truncate block">{{ b.caption or 'Untitled Banner' }}</strong>
-              <span class="text-[10px] text-slate-500 truncate block">{{ b.image_url }}</span>
+              {% if b.description %}
+                <p class="text-[10px] text-slate-600 dark:text-slate-400 line-clamp-1 font-medium mt-0.5">{{ b.description }}</p>
+              {% endif %}
+              <span class="text-[9px] text-slate-400 truncate block mt-0.5">{{ b.image_url }}</span>
+              <span class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full inline-block mt-1 {% if b.is_active %}bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300{% else %}bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-400{% endif %}">
+                {% if b.is_active %}Active (Order: {{ b.order }}){% else %}Inactive{% endif %}
+              </span>
             </div>
-            <button onclick="deleteBanner({{ b.id }})" class="p-2 text-rose-500 hover:text-rose-700 text-sm">
-              <i class="fas fa-trash-alt"></i>
-            </button>
+            <div class="flex items-center gap-1">
+              <button onclick="openEditBannerModal({{ b.id }}, '{{ b.image_url|e }}', '{{ (b.caption or '')|e }}', '{{ (b.description or '')|e }}', {{ b.order or 0 }}, {{ 'true' if b.is_active else 'false' }})" class="p-2 text-blue-500 hover:text-blue-700 text-sm" title="Edit Banner">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button onclick="deleteBanner({{ b.id }})" class="p-2 text-rose-500 hover:text-rose-700 text-sm" title="Delete Banner">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
           </div>
         {% else %}
           <p class="text-xs text-slate-500 py-4 col-span-3">No custom banners added yet. Default images are currently active.</p>
@@ -109,59 +306,48 @@
     </div>
 
 
-    <!-- GRAPHICAL ANALYTICS CHARTS DASHBOARD SECTION -->
-    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
-      <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 text-white flex items-center justify-center text-lg font-bold">
-          <i class="fas fa-chart-pie"></i>
-        </div>
-        <div>
-          <h2 class="text-xl font-bold text-slate-900 dark:text-white">Graphical Analytics Overview</h2>
-          <p class="text-xs text-slate-500">Real-time metrics visualization for Mukesh Ajmera LIC Portal.</p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
-          <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-4 text-center">LIC vs Post Office Schemes</h3>
-          <div class="relative max-h-[220px]">
-            <canvas id="categoryChart"></canvas>
-          </div>
-        </div>
-
-        <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
-          <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-4 text-center">User Registrations & Contact Leads</h3>
-          <div class="relative max-h-[220px]">
-            <canvas id="leadsChart"></canvas>
-          </div>
-        </div>
-
-        <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
-          <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-4 text-center">Smart Assistant Query Volume</h3>
-          <div class="relative max-h-[220px]">
-            <canvas id="chatsChart"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
 
 
-    <!-- Contact Us Form Submissions / Leads Table -->
-    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+
+    <!-- Contact Us Form Submissions & Scheme Lead Management Table -->
+    <div id="leads-section" class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-lg font-bold">
             <i class="fas fa-phone-volume"></i>
           </div>
           <div>
-            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Contact Us Form Leads ({{ contact_leads|length }})</h2>
-            <p class="text-xs text-slate-500">Direct consultation requests submitted by visitors.</p>
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">LIC & Post Office Customer Lead Management ({{ contact_leads|length }})</h2>
+            <p class="text-xs text-slate-500">Manage direct consultation requests, scheme interest, status, and client contact details.</p>
           </div>
         </div>
 
         <button onclick="exportTableToExcel('leads-table', 'Contact_Leads_Mukesh_Ajmera.xlsx')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition inline-flex items-center gap-1.5 self-start sm:self-center">
           <i class="fas fa-file-excel text-sm"></i> Export to Excel (.xlsx)
         </button>
+      </div>
+
+      <!-- Search & Filter Controls Toolbar for Leads -->
+      <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 bg-slate-50 dark:bg-slate-800/40 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
+        <div class="sm:col-span-6">
+          <input type="text" id="leads-search-input" placeholder="🔍 Search leads by Client Name, Phone (+91), or Location..." class="w-full px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-semibold">
+        </div>
+        <div class="sm:col-span-3">
+          <select id="leads-filter-category" class="w-full px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white outline-none">
+            <option value="all">All Scheme Categories</option>
+            <option value="lic">LIC Insurance</option>
+            <option value="post">Post Office Scheme</option>
+          </select>
+        </div>
+        <div class="sm:col-span-3">
+          <select id="leads-filter-status" class="w-full px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white outline-none">
+            <option value="all">All Lead Statuses</option>
+            <option value="new lead">🔵 New Lead</option>
+            <option value="in progress">🟡 In Progress</option>
+            <option value="policy issued">🟢 Policy Issued</option>
+            <option value="closed">⚪ Closed</option>
+          </select>
+        </div>
       </div>
 
       <!-- Pagination & Row Count Control Bar -->
@@ -179,8 +365,9 @@
 
         <div class="flex items-center gap-3">
           <div id="leads-page-info" class="text-slate-500 font-medium">Page 1 of 1</div>
-          <div class="flex items-center gap-1">
+          <div class="flex items-center gap-1.5">
             <button id="leads-prev-btn" class="px-3 py-1 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white font-bold disabled:opacity-50 transition">Prev</button>
+            <div id="leads-page-numbers" class="flex items-center gap-1"></div>
             <button id="leads-next-btn" class="px-3 py-1 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white font-bold disabled:opacity-50 transition">Next</button>
           </div>
         </div>
@@ -191,32 +378,56 @@
           <thead class="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-bold uppercase text-[10px]">
             <tr>
               <th class="p-3">ID</th>
-              <th class="p-3">User Name</th>
-              <th class="p-3">Mobile Number</th>
-              <th class="p-3">Location</th>
-              <th class="p-3">Message</th>
+              <th class="p-3">Client / Lead Name</th>
+              <th class="p-3">Contact Number (Admin Only)</th>
+              <th class="p-3">DOB</th>
+              <th class="p-3">Interested Scheme</th>
+              <th class="p-3">Lead Status</th>
               <th class="p-3">Date</th>
-              <th class="p-3">WhatsApp Action</th>
+              <th class="p-3">Actions</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
             {% for lead in contact_leads %}
               <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
                 <td class="p-3 font-bold">#{{ lead.id }}</td>
-                <td class="p-3 font-bold text-slate-900 dark:text-white">{{ lead.name }}</td>
-                <td class="p-3 font-semibold">+91 {{ lead.phone }}</td>
-                <td class="p-3">{{ lead.location }}</td>
-                <td class="p-3 max-w-xs truncate">{{ lead.message or 'General Consultation' }}</td>
-                <td class="p-3">{{ lead.created_at.strftime('%Y-%m-%d %H:%M') if lead.created_at else '' }}</td>
+                <td class="p-3 font-bold text-slate-900 dark:text-white">
+                  {{ lead.name }}
+                  <span class="block text-[10px] text-slate-500 font-normal"><i class="fas fa-map-marker-alt text-red-400 mr-1"></i>{{ lead.location or 'Sarwar, Rajasthan' }}</span>
+                </td>
+                <td class="p-3 font-bold text-emerald-600 dark:text-emerald-400">
+                  +91 {{ lead.phone }}
+                </td>
+                <td class="p-3 font-medium">
+                  {{ lead.dob or 'N/A' }}
+                </td>
                 <td class="p-3">
-                  <a href="https://wa.me/91{{ lead.phone }}?text=Hi%20{{ lead.name|urlencode }},%20this%20is%20Mukesh%20Ajmera%20from%20Sarwar.%20I%20received%20your%20inquiry." target="_blank" class="px-3 py-1 bg-emerald-100 hover:bg-emerald-600 hover:text-white text-emerald-800 rounded-lg font-bold text-[10px] transition inline-flex items-center gap-1">
-                    <i class="fab fa-whatsapp"></i> WhatsApp Reply
+                  <span class="px-2 py-0.5 rounded text-[10px] font-extrabold {% if lead.interested_category == 'POST_OFFICE' %}bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300{% else %}bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300{% endif %}">
+                    {{ lead.interested_category or 'LIC' }}
+                  </span>
+                  <span class="block text-[10px] text-slate-600 dark:text-slate-400 font-bold truncate max-w-[140px]">{{ lead.interested_plan or lead.message or 'General Consultation' }}</span>
+                </td>
+                <td class="p-3">
+                  <select onchange="updateLeadStatus({{ lead.id }}, this.value)" class="px-2.5 py-1 rounded-lg text-[10px] font-bold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none">
+                    <option value="New Lead" {% if (lead.status or 'New Lead') == 'New Lead' %}selected{% endif %}>🔵 New Lead</option>
+                    <option value="In Progress" {% if lead.status == 'In Progress' %}selected{% endif %}>🟡 In Progress</option>
+                    <option value="Policy Issued" {% if lead.status == 'Policy Issued' %}selected{% endif %}>🟢 Policy Issued</option>
+                    <option value="Closed" {% if lead.status == 'Closed' %}selected{% endif %}>⚪ Closed</option>
+                  </select>
+                </td>
+                <td class="p-3">{{ lead.created_at.strftime('%Y-%m-%d %H:%M') if lead.created_at else '' }}</td>
+                <td class="p-3 flex items-center gap-1.5">
+                  <a href="https://wa.me/91{{ lead.phone }}?text=Hi%20{{ lead.name|urlencode }},%20this%20is%20Mukesh%20Ajmera%20from%20Sarwar.%20I%20received%20your%20inquiry." target="_blank" class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-600 hover:text-white text-emerald-800 rounded-lg font-bold text-[10px] transition inline-flex items-center gap-1">
+                    <i class="fab fa-whatsapp"></i> Reply
                   </a>
+                  <button onclick="deleteLead({{ lead.id }})" class="p-1.5 text-rose-500 hover:text-rose-700 text-xs" title="Delete Lead">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
                 </td>
               </tr>
             {% else %}
               <tr>
-                <td colspan="7" class="p-4 text-center text-slate-500">No contact leads submitted yet.</td>
+                <td colspan="8" class="p-4 text-center text-slate-500">No contact leads submitted yet.</td>
               </tr>
             {% endfor %}
           </tbody>
@@ -226,7 +437,7 @@
 
 
     <!-- Product Catalog CRUD with CKEditor Rich Text Input -->
-    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+    <div id="products-section" class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg font-bold">
@@ -248,6 +459,27 @@
         </div>
       </div>
 
+      <!-- Search & Filter Controls Toolbar for Products -->
+      <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 bg-slate-50 dark:bg-slate-800/40 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
+        <div class="sm:col-span-6">
+          <input type="text" id="products-search-input" placeholder="🔍 Search plans by Title, Tax Benefit, or Keywords..." class="w-full px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-semibold">
+        </div>
+        <div class="sm:col-span-3">
+          <select id="products-filter-category" class="w-full px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white outline-none">
+            <option value="all">All Categories</option>
+            <option value="lic">LIC Insurance</option>
+            <option value="post_office">Post Office Scheme</option>
+          </select>
+        </div>
+        <div class="sm:col-span-3">
+          <select id="products-filter-status" class="w-full px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white outline-none">
+            <option value="all">All Statuses</option>
+            <option value="active">Active</option>
+            <option value="disabled">Disabled</option>
+          </select>
+        </div>
+      </div>
+
       <!-- Pagination & Row Count Control Bar for Product Catalog -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
         <div class="flex items-center gap-2">
@@ -263,8 +495,9 @@
 
         <div class="flex items-center gap-3">
           <div id="products-page-info" class="text-slate-500 font-medium">Page 1 of 1</div>
-          <div class="flex items-center gap-1">
+          <div class="flex items-center gap-1.5">
             <button id="products-prev-btn" class="px-3 py-1 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white font-bold disabled:opacity-50 transition">Prev</button>
+            <div id="products-page-numbers" class="flex items-center gap-1"></div>
             <button id="products-next-btn" class="px-3 py-1 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white font-bold disabled:opacity-50 transition">Next</button>
           </div>
         </div>
@@ -318,7 +551,7 @@
     </div>
 
     <!-- AI SYSTEM PROMPT, VECTOR ENGINE & OFFICE LOCATION MANAGEMENT -->
-    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+    <div id="ai-settings-section" class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
       <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
         <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center text-lg font-bold">
           <i class="fas fa-brain"></i>
@@ -437,6 +670,66 @@
   </div>
 </div>
 
+<!-- Edit Banner Modal -->
+<div id="edit-banner-modal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-md w-full border border-slate-200 dark:border-slate-800 shadow-2xl space-y-4">
+    <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+      <h3 class="font-bold text-base text-slate-900 dark:text-white"><i class="fas fa-edit text-amber-500 mr-2"></i>Edit Slider Banner Item</h3>
+      <button onclick="$('#edit-banner-modal').addClass('hidden')" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
+    </div>
+
+    <form id="edit-banner-form" class="space-y-3 text-xs">
+      <input type="hidden" id="edit-banner-id" name="id">
+      <input type="hidden" id="edit-banner-url" name="image_url">
+
+      <!-- Banner Image File Upload & Preview -->
+      <div class="space-y-1">
+        <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 text-[11px] flex items-center justify-between">
+          <span><i class="fas fa-file-image text-blue-500 mr-1"></i> Upload Banner Image File <span class="text-red-500">*</span></span>
+          <span class="text-[9px] text-slate-400 font-normal">Max 5MB • Min 400x300px</span>
+        </label>
+        
+        <div id="edit-banner-dropzone" class="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-amber-500 rounded-2xl p-3 bg-slate-50 dark:bg-slate-800/40 relative group transition">
+          <input type="file" id="edit-banner-file-input" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
+          
+          <div class="flex items-center gap-3 relative z-10 pointer-events-none">
+            <img id="edit-banner-preview-img" src="" class="w-20 h-14 rounded-xl object-cover border border-slate-200 dark:border-slate-700 shadow-sm" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'800\' height=\'600\' viewBox=\'0 0 800 600\'><rect width=\'800\' height=\'600\' fill=\'%231e3a8a\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23ffffff\' font-family=\'sans-serif\' font-size=\'24\'>Banner Image</text></svg>';">
+            <div class="text-left flex-1 overflow-hidden">
+              <span id="edit-banner-file-name" class="text-xs font-bold text-slate-900 dark:text-white truncate block">Current Image</span>
+              <p class="text-[11px] text-amber-500 font-bold mt-0.5 flex items-center gap-1">
+                <i class="fas fa-cloud-upload-alt"></i> Click or Drag & Drop new file to replace
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">Caption / Title</label>
+        <input type="text" id="edit-banner-caption" name="caption" placeholder="Banner Headline" class="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-semibold">
+      </div>
+      <div>
+        <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">Description Text</label>
+        <textarea id="edit-banner-description" name="description" rows="2" placeholder="Banner Subtitle / Detailed description" class="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-semibold"></textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">Sort Order</label>
+          <input type="number" id="edit-banner-order" name="order" value="0" class="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+        </div>
+        <div>
+          <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">Status</label>
+          <select id="edit-banner-active" name="is_active" class="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold">
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow mt-2">Save Banner Changes</button>
+    </form>
+  </div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
@@ -500,11 +793,106 @@ $(document).ready(function() {
         options: { responsive: true, plugins: { legend: { display: false } } }
     });
 
+    // Chart 4: Live User Engagement Breakdown
+    const ctxActivity = document.getElementById('activityChart').getContext('2d');
+    new Chart(ctxActivity, {
+        type: 'doughnut',
+        data: {
+            labels: ['Site Visits', 'Client Accounts', 'Leads Submitted', 'AI Queries'],
+            datasets: [{
+                data: [{{ stats.visitors }}, {{ stats.users }}, {{ stats.leads }}, {{ stats.chats }}],
+                backgroundColor: ['#6366f1', '#3b82f6', '#10b981', '#a855f7'],
+                borderWidth: 0
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+
+    // Helper function to process, validate & upload banner image file
+    function processAndUploadBannerFile(file, isEditMode) {
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+            alert('इमेज फ़ाइल का आकार 5MB से अधिक है (' + (file.size / (1024*1024)).toFixed(2) + 'MB)। कृपया 5MB से कम आकार की फ़ाइल चुनें।');
+            if (isEditMode) { $('#edit-banner-file-input').val(''); }
+            else { $('#add-banner-file-input').val(''); $('#add-banner-preview-box').addClass('hidden'); $('#add-banner-drop-content').removeClass('hidden'); }
+            return;
+        }
+
+        const img = new Image();
+        const objectUrl = URL.createObjectURL(file);
+        img.onload = function() {
+            if (this.width < 400 || this.height < 300) {
+                alert('इमेज की चौड़ाई/ऊंचाई बहुत छोटी है (' + this.width + 'x' + this.height + 'px)। न्यूनतम 400x300px आकार आवश्यक है।');
+                if (isEditMode) { $('#edit-banner-file-input').val(''); }
+                else { $('#add-banner-file-input').val(''); $('#add-banner-preview-box').addClass('hidden'); $('#add-banner-drop-content').removeClass('hidden'); }
+                URL.revokeObjectURL(objectUrl);
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+            $.ajax({
+                url: '/admin/api/upload-banner',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(res) {
+                    if (res.success) {
+                        if (isEditMode) {
+                            $('#edit-banner-url').val(res.image_url);
+                            $('#edit-banner-preview-img').attr('src', res.image_url);
+                        } else {
+                            $('#add-banner-url-input').val(res.image_url);
+                            $('#add-banner-preview-img').attr('src', res.image_url);
+                            $('#add-banner-preview-info').text('✓ ' + res.width + 'x' + res.height + ' px');
+                            $('#add-banner-preview-size').text(res.size_kb + ' KB (Uploaded)');
+                            $('#add-banner-drop-content').addClass('hidden');
+                            $('#add-banner-preview-box').removeClass('hidden');
+                        }
+                    }
+                },
+                error: function(err) {
+                    alert('इमेज अपलोड विफल: ' + (err.responseJSON ? err.responseJSON.message : 'Upload Error'));
+                    if (isEditMode) { $('#edit-banner-file-input').val(''); }
+                    else { $('#add-banner-file-input').val(''); $('#add-banner-preview-box').addClass('hidden'); $('#add-banner-drop-content').removeClass('hidden'); }
+                }
+            });
+            URL.revokeObjectURL(objectUrl);
+        };
+        img.src = objectUrl;
+    }
+
+    // Add Banner File Input Listener
+    $('#add-banner-file-input').on('change', function() {
+        processAndUploadBannerFile(this.files[0], false);
+    });
+
+    // Remove file button listener
+    $('#remove-add-banner-file').on('click', function(e) {
+        e.stopPropagation();
+        $('#add-banner-file-input').val('');
+        $('#add-banner-url-input').val('');
+        $('#add-banner-preview-box').addClass('hidden');
+        $('#add-banner-drop-content').removeClass('hidden');
+    });
+
+    // Edit Banner File Input Listener
+    $('#edit-banner-file-input').on('change', function() {
+        processAndUploadBannerFile(this.files[0], true);
+    });
+
     // Add Banner Image Form Submit
     $('#add-banner-form').on('submit', function(e) {
         e.preventDefault();
         const data = {};
         $(this).serializeArray().forEach(item => data[item.name] = item.value);
+
+        if (!data.image_url) {
+            alert('कृपया बैनर इमेज फ़ाइल चुनें एवं अपलोड करें।');
+            return;
+        }
 
         $.ajax({
             url: '/admin/api/banners',
@@ -512,6 +900,32 @@ $(document).ready(function() {
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function() { location.reload(); }
+        });
+    });
+
+    // Edit Banner Form Submit (PUT)
+    $('#edit-banner-form').on('submit', function(e) {
+        e.preventDefault();
+        const id = $('#edit-banner-id').val();
+        const data = {
+            image_url: $('#edit-banner-url').val(),
+            caption: $('#edit-banner-caption').val(),
+            description: $('#edit-banner-description').val(),
+            order: parseInt($('#edit-banner-order').val()) || 0,
+            is_active: $('#edit-banner-active').val() === 'true'
+        };
+
+        $.ajax({
+            url: '/admin/api/banners/' + id,
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(res) {
+                location.reload();
+            },
+            error: function(err) {
+                alert('Error updating banner item: ' + (err.responseJSON ? err.responseJSON.message : 'Update failed'));
+            }
         });
     });
 
@@ -531,9 +945,16 @@ $(document).ready(function() {
         });
     });
 
-    // Initialize Table Paginations (2, 5, 10, 100, 1000 per page)
-    initTablePagination('leads-table', 'leads-page-size', 'leads-page-info', 'leads-prev-btn', 'leads-next-btn');
-    initTablePagination('products-table', 'products-page-size', 'products-page-info', 'products-prev-btn', 'products-next-btn');
+    // Initialize Table Paginations & Dynamic Search Filters
+    initTablePagination('leads-table', 'leads-page-size', 'leads-page-info', 'leads-prev-btn', 'leads-next-btn', 'leads-page-numbers');
+    initTableFilter('leads-table', 'leads-search-input', ['#leads-filter-category', '#leads-filter-status'], function() {
+        initTablePagination('leads-table', 'leads-page-size', 'leads-page-info', 'leads-prev-btn', 'leads-next-btn', 'leads-page-numbers');
+    });
+
+    initTablePagination('products-table', 'products-page-size', 'products-page-info', 'products-prev-btn', 'products-next-btn', 'products-page-numbers');
+    initTableFilter('products-table', 'products-search-input', ['#products-filter-category', '#products-filter-status'], function() {
+        initTablePagination('products-table', 'products-page-size', 'products-page-info', 'products-prev-btn', 'products-next-btn', 'products-page-numbers');
+    });
 
     // AI Settings & System Prompt Form Submit
     $('#ai-settings-form').on('submit', function(e) {
@@ -555,6 +976,20 @@ $(document).ready(function() {
 });
 
 function openProductModal() { $('#add-product-modal').removeClass('hidden'); }
+
+function openEditBannerModal(id, url, caption, description, order, isActive) {
+    $('#edit-banner-id').val(id);
+    $('#edit-banner-url').val(url);
+    $('#edit-banner-preview-img').attr('src', url);
+    const fname = url.split('/').pop();
+    $('#edit-banner-file-name').text(fname || 'Current Banner Image');
+    $('#edit-banner-caption').val(caption);
+    $('#edit-banner-description').val(description);
+    $('#edit-banner-order').val(order);
+    $('#edit-banner-active').val(isActive ? 'true' : 'false');
+    $('#edit-banner-file-input').val('');
+    $('#edit-banner-modal').removeClass('hidden');
+}
 
 function deleteBanner(id) {
     if (confirm('Delete this slider banner image?')) {
@@ -585,5 +1020,93 @@ function deleteProduct(id) {
         });
     }
 }
+
+function updateLeadStatus(id, newStatus) {
+    $.ajax({
+        url: '/admin/api/leads/' + id,
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify({ status: newStatus }),
+        success: function() {
+            // Success silent reload or toast
+        },
+        error: function(err) {
+            alert('Failed to update lead status.');
+        }
+    });
+}
+
+function deleteLead(id) {
+    if (confirm('Delete this client lead record?')) {
+        $.ajax({
+            url: '/admin/api/leads/' + id,
+            type: 'DELETE',
+            success: function() { location.reload(); }
+        });
+    }
+}
+
+// Birthday List Client-Side Pagination System
+function initBirthdayPagination() {
+  const cards = document.querySelectorAll('#bday-grid .bday-card-item');
+  const totalItems = cards.length;
+  if (totalItems === 0) return;
+
+  const itemsPerPage = 6;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  let currentPage = 1;
+
+  function showPage(page) {
+    currentPage = page;
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+
+    cards.forEach((card, index) => {
+      if (index >= start && index < end) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    const infoEl = document.getElementById('bday-pagination-info');
+    if (infoEl) {
+      const displayEnd = Math.min(end, totalItems);
+      infoEl.innerHTML = `Showing <strong>${start + 1}–${displayEnd}</strong> of <strong>${totalItems}</strong> Today's Birthdays (Page <strong>${currentPage}</strong> of <strong>${totalPages}</strong>)`;
+    }
+
+    const btnContainer = document.getElementById('bday-pagination-buttons');
+    if (btnContainer) {
+      if (totalPages <= 1) {
+        btnContainer.innerHTML = '';
+        return;
+      }
+      let html = '';
+      html += `<button type="button" onclick="changeBdayPage(${currentPage - 1})" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 ${currentPage === 1 ? 'opacity-40 cursor-not-allowed bg-slate-200 dark:bg-slate-800 text-slate-400' : 'bg-amber-500 hover:bg-amber-600 text-white shadow'}" ${currentPage === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left text-[10px]"></i> Prev</button>`;
+      
+      for (let i = 1; i <= totalPages; i++) {
+        html += `<button type="button" onclick="changeBdayPage(${i})" class="px-3 py-1.5 rounded-xl text-xs font-bold transition ${i === currentPage ? 'bg-amber-600 text-white shadow-md ring-2 ring-amber-400' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'}">${i}</button>`;
+      }
+
+      html += `<button type="button" onclick="changeBdayPage(${currentPage + 1})" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 ${currentPage === totalPages ? 'opacity-40 cursor-not-allowed bg-slate-200 dark:bg-slate-800 text-slate-400' : 'bg-amber-500 hover:bg-amber-600 text-white shadow'}" ${currentPage === totalPages ? 'disabled' : ''}>Next <i class="fas fa-chevron-right text-[10px]"></i></button>`;
+
+      btnContainer.innerHTML = html;
+    }
+  }
+
+  window.changeBdayPage = function(page) {
+    if (page < 1 || page > totalPages) return;
+    showPage(page);
+  };
+
+  showPage(1);
+}
+
+$(document).ready(function() {
+  initBirthdayPagination();
+});
 </script>
+
+  </div> <!-- End Main Content Area -->
+</div> <!-- End Admin Flex Layout Wrapper -->
 {% endblock %}

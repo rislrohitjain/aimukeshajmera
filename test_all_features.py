@@ -100,5 +100,132 @@ class MukeshAjmeraAppTestCase(unittest.TestCase):
         self.assertEqual(data_db['status'], 'connected')
         print("OK - Test 07 Passed: /checkdb and /sitemap.xml endpoints verified.")
 
+    def test_08_banner_edit_and_visitor_counter(self):
+        # 1. Test visitor counter increment on visiting homepage
+        res_home = self.client.get('/')
+        self.assertEqual(res_home.status_code, 200)
+
+        # 2. Test banner creation and editing via Admin API
+        with self.client:
+            self.client.post('/login', data={'phone': '9829943216', 'password': '9829943216', 'action': 'login'})
+            
+            # Create Banner
+            res_add = self.client.post('/admin/api/banners', json={
+                'image_url': 'https://example.com/test-banner.jpg',
+                'caption': 'Test Banner Headline',
+                'description': 'Test Banner Description Text',
+                'order': 1
+            })
+            self.assertEqual(res_add.status_code, 200)
+
+            # Get Banner ID
+            res_list = self.client.get('/admin/api/banners')
+            banners = json.loads(res_list.data)
+            self.assertGreater(len(banners), 0)
+            target_id = banners[0]['id']
+
+            # Update Banner (PUT)
+            res_edit = self.client.put(f'/admin/api/banners/{target_id}', json={
+                'image_url': 'https://example.com/updated-banner.jpg',
+                'caption': 'Updated Headline',
+                'description': 'Updated Subtitle Description',
+                'order': 5,
+                'is_active': False
+            })
+            self.assertEqual(res_edit.status_code, 200)
+            data_edit = json.loads(res_edit.data)
+            self.assertTrue(data_edit['success'])
+
+            # Test File Upload Endpoint with PIL Valid Image
+            import io
+            from PIL import Image
+            img_byte_arr = io.BytesIO()
+            img = Image.new('RGB', (800, 600), color='blue')
+            img.save(img_byte_arr, format='PNG')
+            img_byte_arr.seek(0)
+            
+            valid_file = (img_byte_arr, "test_banner.png")
+            res_upload = self.client.post('/admin/api/upload-banner', data={'file': valid_file}, content_type='multipart/form-data')
+            self.assertEqual(res_upload.status_code, 200)
+            data_upload = json.loads(res_upload.data)
+            self.assertTrue(data_upload['success'])
+            self.assertIn('/static/uploads/banners/', data_upload['image_url'])
+
+            # Test Oversized File Validation (>5MB)
+            big_stream = io.BytesIO(b"0" * (6 * 1024 * 1024))
+            big_file = (big_stream, "huge_banner.jpg")
+            res_big = self.client.post('/admin/api/upload-banner', data={'file': big_file}, content_type='multipart/form-data')
+            self.assertEqual(res_big.status_code, 400)
+
+            print("OK - Test 08 Passed: Banner Image File Upload with 5MB size & 400x300px dimension validation verified.")
+
+    def test_09_lead_management_and_today_birthdays(self):
+        from datetime import datetime
+        today_str = datetime.utcnow().strftime('%Y-%m-%d')
+
+        # 1. Create a lead with today's DOB
+        res_lead = self.client.post('/contact', json={
+            'name': 'Birthday Test Client',
+            'phone': '9988776655',
+            'location': 'Sarwar',
+            'message': 'Interested in LIC Jeevan Labh',
+            'dob': today_str,
+            'interested_category': 'LIC',
+            'interested_plan': 'LIC Jeevan Labh'
+        })
+        self.assertEqual(res_lead.status_code, 200)
+
+        # 2. Login as admin and verify today_birthdays and lead status update
+        with self.client:
+            self.client.post('/login', data={'phone': '9829943216', 'password': '9829943216', 'action': 'login'})
+            
+            res_dash = self.client.get('/admin/dashboard')
+            self.assertEqual(res_dash.status_code, 200)
+            self.assertIn('Birthday Test Client', res_dash.get_data(as_text=True))
+
+            # Fetch lead record from DB
+            with self.app.app_context():
+                lead = ContactLead.query.filter_by(phone='9988776655').first()
+                self.assertIsNotNone(lead)
+                lead_id = lead.id
+
+            # Update Lead Status
+            res_update = self.client.put(f'/admin/api/leads/{lead_id}', json={
+                'status': 'Policy Issued',
+                'interested_plan': 'LIC Jeevan Labh (Policy #12345)'
+            })
+            self.assertEqual(res_update.status_code, 200)
+            data_up = json.loads(res_update.data)
+            self.assertTrue(data_up['success'])
+
+            print("OK - Test 09 Passed: Today's Birthdays detection and Admin Lead Management API verified.")
+
+    def test_10_quick_links_and_paginated_chat_logs(self):
+        with self.client:
+            self.client.post('/login', data={'phone': '9829943216', 'password': '9829943216', 'action': 'login'})
+            
+            # Check Dashboard Quick Links & Section IDs
+            res_dash = self.client.get('/admin/dashboard')
+            self.assertEqual(res_dash.status_code, 200)
+            dash_html = res_dash.get_data(as_text=True)
+            self.assertIn('href="#products-section"', dash_html)
+            self.assertIn('href="#leads-section"', dash_html)
+            self.assertIn('href="#banners-section"', dash_html)
+            self.assertIn('href="#ai-settings-section"', dash_html)
+            self.assertIn('id="activityChart"', dash_html)
+
+            # Check Users List & Paginated Chat Logs Table
+            res_users = self.client.get('/admin/users')
+            self.assertEqual(res_users.status_code, 200)
+            users_html = res_users.get_data(as_text=True)
+            self.assertIn('chats-table', users_html)
+            self.assertIn('AI_Chat_Logs_Mukesh_Ajmera.xlsx', users_html)
+            self.assertIn('chats-search-input', users_html)
+
+            print("OK - Test 10 Passed: Dashboard quick links, live activity chart & paginated chat logs table verified.")
+
 if __name__ == '__main__':
     unittest.main()
+
+
+

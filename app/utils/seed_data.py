@@ -57,26 +57,31 @@ def seed_database():
         {
             "image_url": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1000&q=80",
             "caption": "सुरक्षित भविष्य एवं उच्च रिटर्न - मुकेश अजमेरा एलआईसी सरवाड़",
+            "description": "एलआईसी जीवन सुरक्षा, पेंशन, टर्म प्लान एवं 100% टैक्स छूट के लिए अधिकृत सेवा केंद्र।",
             "order": 1
         },
         {
             "image_url": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=1000&q=80",
             "caption": "भारतीय डाकघर बचत योजनाएं (PPF, SSY & SCSS)",
+            "description": "सुरक्षित डाकघर बचत योजनाओं की संपूर्ण जानकारी एवं खाता खोलने की निःशुल्क सुविधा।",
             "order": 2
         },
         {
             "image_url": "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=1000&q=80",
             "caption": "100% भारत सरकार की सुरक्षा एवं 10(10D) टैक्स छूट",
+            "description": "धारा 80C के तहत आयकर बचत एवं मृत्यु/परिपक्वता पर पूर्णतः कर-मुक्त राशि।",
             "order": 3
         },
         {
             "image_url": "https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=1000&q=80",
             "caption": "बेटियों की उच्च शिक्षा एवं विवाह हेतु सुकन्या समृद्धि योजना",
+            "description": "बालिकाओं के उज्ज्वल भविष्य हेतु सर्वोच्च ब्याज दर वाली सरकारी डाकघर योजना।",
             "order": 4
         },
         {
             "image_url": "https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=1000&q=80",
             "caption": "एलआईसी जीवन लाभ (Plan 936) - सीमित प्रीमियम एवं गारंटीड बोनस",
+            "description": "कम समय प्रीमियम भरें एवं लंबे समय तक सुरक्षा व शानदार रिफंड प्राप्त करें।",
             "order": 5
         }
     ]

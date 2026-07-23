@@ -40,6 +40,17 @@ def create_app():
     app.register_blueprint(products_bp)
     app.register_blueprint(chat_bp)
 
+    from app.models import VisitorCount
+
+    @app.context_processor
+    def inject_visitor_count():
+        try:
+            v = VisitorCount.query.filter_by(page='home').first()
+            count = v.count if v else 0
+        except Exception:
+            count = 0
+        return dict(visitor_count=count)
+
     # Database Initialization, Migration & Seeding
     with app.app_context():
         try:
@@ -49,6 +60,11 @@ def create_app():
             db.session.execute(text("ALTER TABLE ai_settings ADD COLUMN IF NOT EXISTS office_phone VARCHAR(50);"))
             db.session.execute(text("ALTER TABLE ai_settings ADD COLUMN IF NOT EXISTS advisor_name VARCHAR(100);"))
             db.session.execute(text("ALTER TABLE chat_logs ADD COLUMN IF NOT EXISTS matched_plan VARCHAR(200);"))
+            db.session.execute(text("ALTER TABLE contact_leads ADD COLUMN IF NOT EXISTS dob VARCHAR(50);"))
+            db.session.execute(text("ALTER TABLE contact_leads ADD COLUMN IF NOT EXISTS interested_category VARCHAR(50);"))
+            db.session.execute(text("ALTER TABLE contact_leads ADD COLUMN IF NOT EXISTS interested_plan VARCHAR(200);"))
+            db.session.execute(text("ALTER TABLE contact_leads ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'New Lead';"))
+            db.session.execute(text("ALTER TABLE banner_images ADD COLUMN IF NOT EXISTS description TEXT;"))
             db.session.commit()
         except Exception as e:
             db.session.rollback()

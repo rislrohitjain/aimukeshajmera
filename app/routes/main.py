@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify, Response, current_app, send_from_directory
-from app.models import Product, Blog, AISettings, ContactLead, Subscriber, SitemapUrl, BannerImage, User
+from app.models import Product, Blog, AISettings, ContactLead, Subscriber, SitemapUrl, BannerImage, User, VisitorCount
 from app.database import db
 import os
 import datetime
@@ -13,6 +13,18 @@ def favicon():
 
 @main_bp.route('/')
 def index():
+    # Increment Visitor Counter
+    try:
+        vc = VisitorCount.query.filter_by(page='home').first()
+        if not vc:
+            vc = VisitorCount(page='home', count=1)
+            db.session.add(vc)
+        else:
+            vc.count += 1
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+
     lic_products = Product.query.filter_by(category='LIC', is_active=True).all()
     post_products = Product.query.filter_by(category='POST_OFFICE', is_active=True).all()
     recent_blogs = Blog.query.order_by(Blog.created_at.desc()).limit(3).all()
@@ -31,11 +43,23 @@ def contact():
     phone = data.get('phone')
     location = data.get('location', 'Sarwar, Rajasthan')
     message = data.get('message', '')
+    dob = data.get('dob', '')
+    interested_category = data.get('interested_category', 'LIC')
+    interested_plan = data.get('interested_plan', '')
 
     if not name or not phone:
         return jsonify({"success": False, "message": "Name and Phone are required."}), 400
 
-    lead = ContactLead(name=name, phone=phone, location=location, message=message)
+    lead = ContactLead(
+        name=name,
+        phone=phone,
+        location=location,
+        message=message,
+        dob=dob,
+        interested_category=interested_category,
+        interested_plan=interested_plan,
+        status='New Lead'
+    )
     db.session.add(lead)
     db.session.commit()
 

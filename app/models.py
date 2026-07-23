@@ -87,6 +87,10 @@ class ContactLead(db.Model):
     phone = db.Column(db.String(20), nullable=False)
     location = db.Column(db.String(250), nullable=True)
     message = db.Column(db.Text, nullable=True)
+    dob = db.Column(db.String(50), nullable=True)
+    interested_category = db.Column(db.String(50), nullable=True, default='LIC')
+    interested_plan = db.Column(db.String(200), nullable=True)
+    status = db.Column(db.String(50), default='New Lead')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
@@ -113,6 +117,17 @@ class BannerImage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     image_url = db.Column(db.String(500), nullable=False)
     caption = db.Column(db.String(250), nullable=True)
+    description = db.Column(db.Text, nullable=True)
     order = db.Column(db.Integer, default=0)
     is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class VisitorCount(db.Model):
+    __tablename__ = 'visitor_counts'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    page = db.Column(db.String(100), default='home')
+    count = db.Column(db.Integer, default=0)
+    last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+

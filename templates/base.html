@@ -34,11 +34,11 @@
   <!-- Google Fonts & FontAwesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Mukta:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   
   <!-- Custom CSS with Cache-Busting -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}?v=20260723_2">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}?v=20260723_3">
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
 
@@ -143,7 +143,7 @@
         <div>
           <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-2">Sarwar Office</h4>
           <p class="text-[11px] text-slate-400 leading-tight mb-1">
-            <i class="fas fa-map-marker-alt text-red-500 mr-1"></i> Near Bhimeshwar Mahadev, Dada Badi, Sarwar 305403
+            <i class="fas fa-map-marker-alt text-red-500 mr-1"></i> Near Bhimeshwar Mahadev Temple, Dada Badi, Sarwar 305403
           </p>
           <p class="text-[11px] text-slate-400 mb-1">
             <i class="fas fa-user-tie text-blue-400 mr-1"></i> Owner: <strong>Mukesh Ajmera</strong>
@@ -156,8 +156,13 @@
       </div>
 
       <!-- Developer Branding Footer Line -->
-      <div class="border-t border-slate-900 mt-6 pt-4 flex flex-col sm:flex-row justify-between items-center text-[11px] text-slate-500 gap-2">
-        <p>© 2026 Mukesh Ajmera LIC & Post Office Services. All Rights Reserved.</p>
+      <div class="border-t border-slate-900 mt-6 pt-4 flex flex-col sm:flex-row justify-between items-center text-[11px] text-slate-500 gap-3">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-amber-400 font-bold text-[11px] shadow-inner">
+            <i class="fas fa-eye"></i> Visitors: <strong class="text-white ml-0.5">{{ visitor_count }}</strong>
+          </span>
+          <p>© 2026 Mukesh Ajmera LIC & Post Office Services. All Rights Reserved.</p>
+        </div>
         <p class="font-medium text-slate-400 text-center sm:text-right">
           Built with ❤️ by <strong class="text-amber-400 font-bold">Rohit Jain</strong> — Senior Full-Stack Engineer & Automation Architect | <span class="italic text-slate-500">Architecting Intelligent Systems</span>
         </p>
