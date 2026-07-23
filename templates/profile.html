@@ -1,0 +1,313 @@
+{% extends 'base.html' %}
+
+{% block title %}मेरी प्रोफ़ाइल एवं स्थान सेटिंग | मुकेश अजमेरा पोर्टलेन{% endblock %}
+
+{% block content %}
+<!-- Leaflet CSS for Map Location Picker -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<section class="py-12 hero-gradient-bg border-b border-slate-200 dark:border-slate-800">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center gap-4">
+      <div class="w-16 h-16 rounded-3xl bg-gradient-to-tr from-blue-700 to-red-600 flex items-center justify-center text-white text-2xl font-black shadow-lg">
+        <i class="fas fa-user-circle"></i>
+      </div>
+      <div>
+        <span class="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-wider">ग्राहक प्रोफ़ाइल</span>
+        <h1 class="text-3xl font-black text-slate-900 dark:text-white mt-1">{{ current_user.name or 'ग्राहक प्रोफ़ाइल' }}</h1>
+        <p class="text-xs text-slate-500 font-medium">पंजीकृत मोबाइल: +91 {{ current_user.phone }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-12">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+
+    <!-- Profile Update Form (With Interactive Map Location Picker) -->
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-lg font-bold">
+            <i class="fas fa-user-edit"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">व्यक्तिगत विवरण एवं स्थान सेटिंग</h2>
+            <p class="text-xs text-slate-500">नाम, जन्म तिथि एवं मानचित्र (Map) से अपना सटीक स्थान चुनें।</p>
+          </div>
+        </div>
+      </div>
+
+      <form action="{{ url_for('auth.profile') }}" method="POST" class="space-y-6">
+        <input type="hidden" name="action" value="update_profile">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">पूरा नाम (Full Name)</label>
+            <input type="text" name="name" value="{{ current_user.name or '' }}" placeholder="अपना नाम दर्ज करें" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-600">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">मोबाइल नंबर (पंजीकृत)</label>
+            <input type="text" value="+91 {{ current_user.phone }}" disabled class="w-full px-4 py-3 rounded-xl bg-slate-200 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-slate-500 text-sm font-bold cursor-not-allowed">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">ईमेल पता (Email)</label>
+            <input type="email" name="email" value="{{ current_user.email or '' }}" placeholder="example@gmail.com" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-600">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">जन्म तिथि (DOB)</label>
+            <input type="date" name="dob" value="{{ current_user.dob or '' }}" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-600">
+          </div>
+        </div>
+
+        <!-- LOCATION MAP PICKER SECTION -->
+        <div class="space-y-3 pt-2">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+              <i class="fas fa-map-marker-alt text-red-500 mr-1"></i> आपका स्थान (मैप या मैन्युअल दर्ज करें)
+            </label>
+            
+            <button type="button" id="detect-geo-btn" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition inline-flex items-center gap-1.5 shadow">
+              <i class="fas fa-crosshairs"></i> 📍 वर्तमान स्थान खोजें (Auto Detect Location)
+            </button>
+          </div>
+
+          <div class="relative">
+            <input type="text" name="location" id="user_location_text" autocomplete="off" value="{{ current_user.location or 'Sarwar, Rajasthan' }}" placeholder="सरवाड़, अजमेर, राजस्थान (टाइप करें...)" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-600">
+            <div id="location-suggestions" class="hidden absolute left-0 right-0 top-full mt-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-50 max-h-60 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700"></div>
+          </div>
+
+          <!-- Lat & Long Hidden Inputs -->
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Latitude (अक्षांश)</label>
+              <input type="text" name="latitude" id="user_lat" value="{{ current_user.latitude or '26.0618' }}" readonly class="w-full px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono text-slate-600 dark:text-slate-300">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Longitude (रेखांश)</label>
+              <input type="text" name="longitude" id="user_lng" value="{{ current_user.longitude or '75.0183' }}" readonly class="w-full px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono text-slate-600 dark:text-slate-300">
+            </div>
+          </div>
+
+          <!-- Interactive Map Picker Container -->
+          <div class="mt-2 rounded-2xl overflow-hidden border-2 border-slate-200 dark:border-slate-700 shadow-md">
+            <div id="profile-map" class="w-full h-64 z-10"></div>
+          </div>
+          <p class="text-[11px] text-slate-500 italic">💡 टीप: आप मानचित्र पर पिन (Pin) को कहीं भी खींचकर (Drag) या क्लिक करके अपना स्थान चुन सकते हैं।</p>
+        </div>
+
+        <button type="submit" class="px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center gap-2">
+          <i class="fas fa-save"></i> प्रोफ़ाइल जानकारी सहेजें (Save Details)
+        </button>
+      </form>
+    </div>
+
+
+    <!-- Password Security Change Card -->
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+      <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+        <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-lg font-bold">
+          <i class="fas fa-key"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">पासवर्ड बदलें (Security & Password)</h2>
+          <p class="text-xs text-slate-500">मानक सुरक्षा नियमों के अनुसार नया पासवर्ड सेट करें।</p>
+        </div>
+      </div>
+
+      <form action="{{ url_for('auth.profile') }}" method="POST" class="space-y-4 max-w-lg">
+        <input type="hidden" name="action" value="change_password">
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">वर्तमान पासवर्ड (Current Password)</label>
+          <input type="password" name="current_password" required placeholder="वर्तमान पासवर्ड दर्ज करें" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm font-semibold outline-none focus:ring-2 focus:ring-amber-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">नया पासवर्ड (New Password)</label>
+          <input type="password" name="new_password" required placeholder="नया पासवर्ड (न्यूनतम 6 अक्षर)" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm font-semibold outline-none focus:ring-2 focus:ring-amber-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">नया पासवर्ड पुनः दर्ज करें (Confirm Password)</label>
+          <input type="password" name="confirm_password" required placeholder="पासवर्ड की पुष्टि करें" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-sm font-semibold outline-none focus:ring-2 focus:ring-amber-500">
+        </div>
+
+        <div class="p-4 rounded-2xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-xs text-amber-800 dark:text-amber-300 space-y-1">
+          <strong class="block font-bold">🔒 पासवर्ड नियम:</strong>
+          <ul class="list-disc pl-4 space-y-0.5">
+            <li>कम से कम 6 अक्षर होने चाहिए।</li>
+            <li>अक्षर (A-Z, a-z) और संख्याएं (0-9) दोनों शामिल होने चाहिए।</li>
+          </ul>
+        </div>
+
+        <button type="submit" class="px-8 py-3.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center gap-2">
+          <i class="fas fa-lock"></i> नया पासवर्ड अपडेट करें
+        </button>
+      </form>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<!-- Leaflet JS for Interactive Map Location Picker -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+$(document).ready(function() {
+    // Default initial coordinates (Sarwar, Rajasthan or User Saved)
+    let initLat = parseFloat($('#user_lat').val()) || 26.0618;
+    let initLng = parseFloat($('#user_lng').val()) || 75.0183;
+
+    // Initialize Leaflet Map
+    const map = L.map('profile-map').setView([initLat, initLng], 14);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // Draggable Marker
+    let marker = L.marker([initLat, initLng], { draggable: true }).addTo(map);
+
+    function updateCoords(lat, lng, fetchAddress = true) {
+        $('#user_lat').val(lat.toFixed(6));
+        $('#user_lng').val(lng.toFixed(6));
+
+        if (fetchAddress) {
+            $('#user_location_text').attr('placeholder', '📍 मानचित्र स्थान का पता लगाया जा रहा है...');
+            
+            // Perform reverse geocoding via OpenStreetMap API
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.address) {
+                        let a = data.address;
+                        let area = a.suburb || a.neighbourhood || a.village || a.town || a.city_district || a.city || a.county || '';
+                        let district = a.state_district || a.district || '';
+                        let state = a.state || 'Rajasthan';
+                        let postcode = a.postcode ? ` (${a.postcode})` : '';
+
+                        let parts = [area, district, state].filter(Boolean);
+                        let cleanAddress = parts.join(', ') + postcode;
+
+                        if (!cleanAddress || cleanAddress.trim().length < 3) {
+                            cleanAddress = (data.display_name || '').split(',').slice(0, 3).join(', ');
+                        }
+
+                        if (cleanAddress) {
+                            $('#user_location_text').val(cleanAddress);
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.log('Reverse geocode note:', err);
+                });
+        }
+    }
+
+    // Marker Drag Event
+    marker.on('dragend', function(e) {
+        let position = marker.getLatLng();
+        updateCoords(position.lat, position.lng, true);
+    });
+
+    // Map Click Event - Automatically fills location input box!
+    map.on('click', function(e) {
+        marker.setLatLng(e.latlng);
+        updateCoords(e.latlng.lat, e.latlng.lng, true);
+    });
+
+    // Auto Detect Geolocation Button
+    $('#detect-geo-btn').on('click', function() {
+        if (navigator.geolocation) {
+            $(this).html('<i class="fas fa-spinner fa-spin"></i> खोजा जा रहा है...');
+            navigator.geolocation.getCurrentPosition(function(position) {
+                let lat = position.coords.latitude;
+                let lng = position.coords.longitude;
+                
+                map.setView([lat, lng], 15);
+                marker.setLatLng([lat, lng]);
+                updateCoords(lat, lng, true);
+
+                $('#detect-geo-btn').html('<i class="fas fa-check"></i> स्थान मिल गया!');
+                setTimeout(function() {
+                    $('#detect-geo-btn').html('<i class="fas fa-crosshairs"></i> 📍 वर्तमान स्थान खोजें');
+                }, 3000);
+            }, function(err) {
+                alert('स्थान का पता लगाने में असमर्थ। कृपया मानचित्र पर क्लिक करके चुनें।');
+                $('#detect-geo-btn').html('<i class="fas fa-crosshairs"></i> 📍 वर्तमान स्थान खोजें');
+            });
+        } else {
+            alert('आपका ब्राउज़र स्थान का पता लगाने का समर्थन नहीं करता है।');
+        }
+    });
+    // Location Input Autocomplete Suggestion Search
+    let searchTimeout = null;
+    $('#user_location_text').on('input', function() {
+        const query = $(this).val().trim();
+        clearTimeout(searchTimeout);
+
+        if (query.length < 2) {
+            $('#location-suggestions').addClass('hidden').empty();
+            return;
+        }
+
+        searchTimeout = setTimeout(function() {
+            fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(query)}&countrycodes=in&limit=6`)
+                .then(res => res.json())
+                .then(results => {
+                    const $list = $('#location-suggestions');
+                    $list.empty();
+
+                    if (results && results.length > 0) {
+                        results.forEach(item => {
+                            const name = item.display_name;
+                            const lat = parseFloat(item.lat);
+                            const lon = parseFloat(item.lon);
+
+                            const $option = $(`
+                                <div class="px-4 py-2.5 hover:bg-blue-50 dark:hover:bg-slate-700/80 cursor-pointer transition text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                                    <i class="fas fa-map-pin text-red-500 shrink-0"></i>
+                                    <span class="truncate">${name}</span>
+                                </div>
+                            `);
+
+                            $option.on('click', function(e) {
+                                e.stopPropagation();
+                                $('#user_location_text').val(name);
+                                $('#user_lat').val(lat.toFixed(6));
+                                $('#user_lng').val(lon.toFixed(6));
+
+                                map.setView([lat, lon], 15);
+                                marker.setLatLng([lat, lon]);
+
+                                $list.addClass('hidden').empty();
+                            });
+
+                            $list.append($option);
+                        });
+                        $list.removeClass('hidden');
+                    } else {
+                        $list.addClass('hidden').empty();
+                    }
+                })
+                .catch(err => {
+                    console.log('Location search note:', err);
+                });
+        }, 300);
+    });
+
+    // Close suggestions dropdown when clicking outside
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('#user_location_text, #location-suggestions').length) {
+            $('#location-suggestions').addClass('hidden');
+        }
+    });
+});
+</script>
+{% endblock %}

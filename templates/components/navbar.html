@@ -1,0 +1,107 @@
+<!-- Top Announcement Bar -->
+<div class="bg-gradient-to-r from-blue-900 via-blue-800 to-red-800 text-white text-xs py-2 px-4 shadow-sm border-b border-blue-800">
+  <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+    <div class="flex items-center gap-2">
+      <span class="bg-yellow-400 text-slate-950 font-black px-2 py-0.5 rounded text-[10px] uppercase tracking-wide">सरवाड़ कार्यालय</span>
+      <span class="font-medium text-slate-100">भिमेश्वर महादेव के पास, दादा बाड़ी के पास, सरवाड़ (अजमेर) 305403</span>
+    </div>
+    <div class="flex items-center gap-4 text-slate-200">
+      <div class="hidden sm:flex items-center gap-2 border-r border-blue-700/60 pr-3">
+        <ul class="p-0 m-0">
+          <li class="social-md">
+            <ul>
+              <li role="complementary"><a href="javascript:void(0)" onclick="ExternalLink('https://www.instagram.com/licindiaforever/?hl=en');"><img src="https://licindia.in/o/lic-theme/images/instagram.svg" role="complementary" alt="Instagram"></a><a href="javascript:void(0)" onclick="ExternalLink('https://www.facebook.com/LICIndiaForever/');"><img src="https://licindia.in/o/lic-theme/images/facebook-original.svg" alt="Facebook"></a><a href="javascript:void(0)" onclick="ExternalLink('https://www.linkedin.com/company/lic/');"><img src="https://licindia.in/o/lic-theme/images/linkedin-original.svg" alt="Linkedin"></a><a href="javascript:void(0)" onclick="ExternalLink('https://www.twitter.com/licindiaforever/');"><img src="https://licindia.in/documents/d/guest/twitternew" alt="X" onerror="this.onerror=null; this.src='https://licindia.in/o/lic-theme/images/twitter.svg'"></a><a href="javascript:void(0)" onclick="ExternalLink('https://www.youtube.com/user/licindiaforever');"><img src="https://licindia.in/o/lic-theme/images/youtube-original-1.svg" role="complementary" alt="Youtube"></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <a href="tel:+919829943216" class="hover:text-yellow-300 font-bold transition flex items-center gap-1">
+        <i class="fas fa-phone-alt text-[10px]"></i> +91 98299 43216
+      </a>
+      <a href="https://wa.me/919829943216?text={% if current_user.is_authenticated %}Hello%20Mukesh%20Ji,%20I%20am%20{{ current_user.name|urlencode }}%20({{ current_user.phone }}).%20I%20need%20guidance%20on%20LIC%20%26%20Post%20Office%20schemes.{% else %}Hello%20Mukesh%20Ji,%20I%20am%20Guest.%20I%20need%20guidance%20on%20LIC%20%26%20Post%20Office%20schemes.{% endif %}" target="_blank" rel="noopener" class="hover:text-emerald-400 font-bold transition flex items-center gap-1">
+        <i class="fab fa-whatsapp text-emerald-400"></i> व्हाट्सएप परामर्श
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Main Sticky Header / Navbar -->
+<header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      
+      <!-- Brand Logo & Name -->
+      <a href="{{ url_for('main.index') }}" class="flex items-center gap-2.5 sm:gap-3 group shrink-0">
+        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-blue-700 via-blue-600 to-red-600 flex items-center justify-center text-white font-black text-lg sm:text-xl shadow-lg shadow-blue-500/20 group-hover:scale-105 transition transform">
+          MA
+        </div>
+        <div>
+          <span class="text-sm sm:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white block leading-tight">
+            मुकेश अजमेरा <span class="text-blue-600 dark:text-blue-400">एलआईसी</span> & <span class="text-red-600 dark:text-red-400">पोस्ट ऑफिस</span>
+          </span>
+          <span class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-medium hidden sm:block">
+            स्मार्ट वित्तीय एवं बीमा सलाहकार • सरवाड़ (राजस्थान)
+          </span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Menu Links (In Clear Hindi) -->
+      <nav class="hidden lg:flex items-center gap-6 font-semibold text-xs text-slate-700 dark:text-slate-200">
+        <a href="{{ url_for('main.index') }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition py-1">मुख्य पृष्ठ</a>
+        <a href="{{ url_for('main.index') }}#plans" class="hover:text-blue-600 dark:hover:text-blue-400 transition py-1">एलआईसी योजनाएं</a>
+        <a href="{{ url_for('main.index') }}#plans" class="hover:text-red-600 dark:hover:text-red-400 transition py-1">डाकघर बचत योजनाएं</a>
+        <a href="{{ url_for('main.index') }}#comparison" class="hover:text-blue-600 dark:hover:text-blue-400 transition py-1">तुलना चार्ट</a>
+        <a href="{{ url_for('main.index') }}#contact-us" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition py-1 text-emerald-600 font-bold"><i class="fas fa-envelope mr-1"></i> संपर्क करें</a>
+        <a href="{{ url_for('blog.list_blogs') }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition py-1">मार्गदर्शिका एवं ब्लॉग</a>
+        <a href="{{ url_for('main.index') }}#useful-links" class="hover:text-amber-500 transition py-1">महत्वपूर्ण लिंक</a>
+      </nav>
+
+      <!-- Right User Controls & Actions -->
+      <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
+        
+        <!-- Theme Toggle Button -->
+        <button id="theme-toggle-btn" class="p-2 sm:p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="Toggle Light/Dark Theme">
+          <i id="theme-icon" class="fas fa-moon text-xs sm:text-base"></i>
+        </button>
+
+        {% if current_user.is_authenticated %}
+          {% if current_user.role == 'admin' %}
+            <a href="{{ url_for('admin.dashboard') }}" class="px-2.5 sm:px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-md transition flex items-center gap-1.5">
+              <i class="fas fa-chart-line"></i> <span class="hidden sm:inline">एडमिन</span>
+            </a>
+          {% endif %}
+          
+          <a href="{{ url_for('auth.profile') }}" class="px-2.5 sm:px-4 py-2 rounded-xl bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 font-bold text-xs border border-blue-200 dark:border-blue-800 hover:bg-blue-100 transition flex items-center gap-1.5">
+            <i class="fas fa-user-circle text-sm"></i> <span class="hidden sm:inline">{{ current_user.name or 'मेरी प्रोफ़ाइल' }}</span>
+          </a>
+
+          <a href="{{ url_for('auth.logout') }}" class="p-2 text-rose-500 hover:text-rose-700 font-bold text-xs transition" title="Logout">
+            <i class="fas fa-sign-out-alt text-base"></i>
+          </a>
+        {% else %}
+          <a href="{{ url_for('auth.login') }}" class="px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-900 text-white font-bold text-xs shadow-md transition flex items-center gap-1.5">
+            <i class="fas fa-sign-in-alt"></i> <span class="hidden sm:inline">मोबाइल द्वारा प्रवेश</span><span class="sm:hidden">प्रवेश</span>
+          </a>
+        {% endif %}
+
+        <!-- Mobile Menu Hamburger Button -->
+        <button id="mobile-menu-btn" class="lg:hidden p-2 sm:p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+          <i class="fas fa-bars text-base sm:text-lg"></i>
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Mobile Dropdown Menu -->
+  <div id="mobile-menu" class="hidden lg:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 pt-3 pb-6 space-y-3 font-bold text-sm">
+    <a href="{{ url_for('main.index') }}" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">मुख्य पृष्ठ</a>
+    <a href="{{ url_for('main.index') }}#plans" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">एलआईसी योजनाएं</a>
+    <a href="{{ url_for('main.index') }}#plans" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">डाकघर बचत योजनाएं</a>
+    <a href="{{ url_for('main.index') }}#comparison" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">तुलना चार्ट</a>
+    <a href="{{ url_for('main.index') }}#contact-us" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-emerald-600 font-bold">संपर्क करें (Contact Us)</a>
+    <a href="{{ url_for('blog.list_blogs') }}" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">मार्गदर्शिका एवं ब्लॉग</a>
+    <a href="{{ url_for('main.index') }}#useful-links" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">महत्वपूर्ण लिंक</a>
+  </div>
+</header>

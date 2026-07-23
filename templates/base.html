@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Mukesh Ajmera LIC & Post Office Services | Sarwar, Rajasthan{% endblock %}</title>
+  
+  <meta name="description" content="Smart Financial Advisory for LIC Insurance and India Post Savings Schemes by Mukesh Ajmera in Sarwar, Rajasthan. Get instant quotes and expert guidance.">
+  <meta name="keywords" content="Mukesh Ajmera, LIC Agent Sarwar, Post Office Scheme Sarwar, Jeevan Labh, PPF, SSY, Rajasthan Financial Advisory">
+  
+  <!-- Favicon Icon -->
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.svg') }}">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ['class', '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              blue: '#1e3a8a',
+              red: '#dc2626',
+              gold: '#f59e0b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts & FontAwesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  
+  <!-- Custom CSS with Cache-Busting -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}?v=20260723_2">
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+
+  <!-- Navbar -->
+  {% include 'components/navbar.html' %}
+
+  <!-- Flash Messages Toast / Banner -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+        {% for category, message in messages %}
+          <div class="p-4 mb-3 rounded-2xl flex items-center justify-between shadow-sm text-sm font-medium
+            {% if category == 'success' %} bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-900/40 dark:text-emerald-300 dark:border-emerald-800
+            {% elif category == 'danger' %} bg-rose-50 text-rose-800 border border-rose-200 dark:bg-rose-900/40 dark:text-rose-300 dark:border-rose-800
+            {% elif category == 'warning' %} bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-900/40 dark:text-amber-300 dark:border-amber-800
+            {% else %} bg-blue-50 text-blue-800 border border-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-800 {% endif %}">
+            <div class="flex items-center gap-2">
+              <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'danger' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+              <span>{{ message }}</span>
+            </div>
+            <button onclick="this.parentElement.remove()" class="opacity-70 hover:opacity-100"><i class="fas fa-times"></i></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Main Body Content -->
+  <main class="flex-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Security Notification Toast -->
+  <div id="security-toast" class="bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border border-slate-700 flex items-center gap-3 text-xs font-semibold">
+    <i class="fas fa-shield-alt text-amber-400 text-base"></i>
+    <span id="toast-message">Protected Content</span>
+  </div>
+
+  <!-- Smart Assistant Widget -->
+  {% include 'components/chat_widget.html' %}
+
+  <!-- Compact Sleek Footer -->
+  <footer class="bg-slate-950 text-slate-400 border-t border-slate-800 pt-8 pb-6 mt-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        
+        <!-- Col 1: Brand Info -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-700 to-red-600 flex items-center justify-center text-white font-black text-sm">
+              MA
+            </div>
+            <span class="text-sm font-bold text-white leading-tight">
+              मुकेश अजमेरा <span class="text-blue-400">LIC</span> & <span class="text-red-400">पोस्ट ऑफिस</span>
+            </span>
+          </div>
+          <p class="text-[11px] leading-relaxed text-slate-400">
+            Smart Financial & Insurance Advisory hub empowering families in Sarwar and Rajasthan.
+          </p>
+          <div class="flex gap-2.5 pt-1 text-slate-300">
+            <a href="https://wa.me/919829943216" target="_blank" class="w-7 h-7 rounded-lg bg-slate-900 hover:bg-emerald-600 hover:text-white flex items-center justify-center text-xs transition"><i class="fab fa-whatsapp"></i></a>
+            <a href="tel:+919829943216" class="w-7 h-7 rounded-lg bg-slate-900 hover:bg-blue-600 hover:text-white flex items-center justify-center text-xs transition"><i class="fas fa-phone"></i></a>
+          </div>
+
+          <!-- Social Media Links -->
+          <div class="pt-2">
+            <ul class="p-0 m-0">
+              <li class="social-md">
+                <ul>
+                  <li role="complementary"><a href="javascript:void(0)" onclick="ExternalLink('https://www.instagram.com/licindiaforever/?hl=en');"><img src="https://licindia.in/o/lic-theme/images/instagram.svg" role="complementary" alt="Instagram"></a><a href="javascript:void(0)" onclick="ExternalLink('https://www.facebook.com/LICIndiaForever/');"><img src="https://licindia.in/o/lic-theme/images/facebook-original.svg" alt="Facebook"></a><a href="javascript:void(0)" onclick="ExternalLink('https://www.linkedin.com/company/lic/');"><img src="https://licindia.in/o/lic-theme/images/linkedin-original.svg" alt="Linkedin"></a><a href="javascript:void(0)" onclick="ExternalLink('https://www.twitter.com/licindiaforever/');"><img src="https://licindia.in/documents/d/guest/twitternew" alt="X" onerror="this.onerror=null; this.src='https://licindia.in/o/lic-theme/images/twitter.svg'"></a><a href="javascript:void(0)" onclick="ExternalLink('https://www.youtube.com/user/licindiaforever');"><img src="https://licindia.in/o/lic-theme/images/youtube-original-1.svg" role="complementary" alt="Youtube"></a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div>
+          <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-2">Quick Navigation</h4>
+          <ul class="space-y-1 text-[11px] font-medium">
+            <li><a href="{{ url_for('main.index') }}" class="hover:text-white transition">Home Portal</a></li>
+            <li><a href="{{ url_for('main.index') }}#plans" class="hover:text-white transition">LIC Insurance & Post Office Plans</a></li>
+            <li><a href="{{ url_for('main.index') }}#comparison" class="hover:text-white transition">Comparison Matrix</a></li>
+            <li><a href="{{ url_for('main.index') }}#contact-us" class="hover:text-white transition">Contact Us Form</a></li>
+            <li><a href="{{ url_for('main.sitemap_xml') }}" target="_blank" class="hover:text-amber-400 transition">XML Sitemap</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Direct Official Portals -->
+        <div>
+          <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-2">Official Links</h4>
+          <ul class="space-y-1 text-[11px] font-medium">
+            <li><a href="https://licindia.in/home" target="_blank" rel="noopener" class="hover:text-blue-400 transition"><i class="fas fa-external-link-alt text-[9px] mr-1"></i> LIC Official Website</a></li>
+            <li><a href="https://licindia.in/branch" target="_blank" rel="noopener" class="hover:text-blue-400 transition"><i class="fas fa-search-location text-[9px] mr-1"></i> Find LIC Branch</a></li>
+            <li><a href="https://licindia.in/web/guest/tax-benefit" target="_blank" rel="noopener" class="hover:text-blue-400 transition"><i class="fas fa-calculator text-[9px] mr-1"></i> Tax Benefits Guide</a></li>
+            <li><a href="https://www.indiapost.gov.in/banking-services/" target="_blank" rel="noopener" class="hover:text-red-400 transition"><i class="fas fa-university text-[9px] mr-1"></i> India Post Banking Portal</a></li>
+            <li><a href="https://www.google.com/maps/contrib/101065908975187739124" target="_blank" rel="noopener" class="hover:text-amber-400 transition"><i class="fab fa-google text-amber-400 text-[9px] mr-1"></i> Google Reviews & Profile (⭐ 5.0)</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Sarwar Office Address -->
+        <div>
+          <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-2">Sarwar Office</h4>
+          <p class="text-[11px] text-slate-400 leading-tight mb-1">
+            <i class="fas fa-map-marker-alt text-red-500 mr-1"></i> Near Bhimeshwar Mahadev, Dada Badi, Sarwar 305403
+          </p>
+          <p class="text-[11px] text-slate-400 mb-1">
+            <i class="fas fa-user-tie text-blue-400 mr-1"></i> Owner: <strong>Mukesh Ajmera</strong>
+          </p>
+          <p class="text-[11px] text-slate-400">
+            <i class="fab fa-whatsapp text-emerald-400 mr-1"></i> Contact: <strong>+91 98299 43216</strong>
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Developer Branding Footer Line -->
+      <div class="border-t border-slate-900 mt-6 pt-4 flex flex-col sm:flex-row justify-between items-center text-[11px] text-slate-500 gap-2">
+        <p>© 2026 Mukesh Ajmera LIC & Post Office Services. All Rights Reserved.</p>
+        <p class="font-medium text-slate-400 text-center sm:text-right">
+          Built with ❤️ by <strong class="text-amber-400 font-bold">Rohit Jain</strong> — Senior Full-Stack Engineer & Automation Architect | <span class="italic text-slate-500">Architecting Intelligent Systems</span>
+        </p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- jQuery & Main JS with Cache-Busting -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}?v=20260723_2"></script>
+  <script src="{{ url_for('static', filename='js/chat.js') }}?v=20260723_2"></script>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

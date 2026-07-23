@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}Registered Users & Advisory Leads | Mukesh Ajmera Admin{% endblock %}
+
+{% block content %}
+<section class="py-12 hero-gradient-bg border-b border-slate-200 dark:border-slate-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between">
+      <div>
+        <span class="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-wider">User Directory & Smart Advisory Engine</span>
+        <h1 class="text-3xl font-black text-slate-900 dark:text-white mt-1">Registered Clients & Advisory Leads</h1>
+      </div>
+      <a href="{{ url_for('admin.dashboard') }}" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs hover:bg-slate-300 transition">
+        <i class="fas fa-arrow-left mr-1"></i> Back to Dashboard
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+
+    <!-- Registered Users Directory -->
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+      <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg font-bold">
+          <i class="fas fa-users"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">Registered Users ({{ users|length }})</h2>
+          <p class="text-xs text-slate-500">Clients registered via mobile number access.</p>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs text-slate-700 dark:text-slate-300">
+          <thead class="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-bold uppercase text-[10px]">
+            <tr>
+              <th class="p-3">ID</th>
+              <th class="p-3">Name</th>
+              <th class="p-3">Mobile Number</th>
+              <th class="p-3">Role</th>
+              <th class="p-3">Location</th>
+              <th class="p-3">DOB</th>
+              <th class="p-3">Registered On</th>
+              <th class="p-3">WhatsApp Lead</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+            {% for u in users %}
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                <td class="p-3 font-bold">#{{ u.id }}</td>
+                <td class="p-3 font-bold text-slate-900 dark:text-white">{{ u.name or 'User ' ~ u.phone[-4:] }}</td>
+                <td class="p-3 font-semibold">+91 {{ u.phone }}</td>
+                <td class="p-3">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-extrabold {% if u.role == 'admin' %}bg-purple-100 text-purple-800{% else %}bg-blue-100 text-blue-800{% endif %}">
+                    {{ u.role|upper }}
+                  </span>
+                </td>
+                <td class="p-3">{{ u.location or 'Sarwar, Rajasthan' }}</td>
+                <td class="p-3">{{ u.dob or 'N/A' }}</td>
+                <td class="p-3">{{ u.created_at.strftime('%Y-%m-%d %H:%M') if u.created_at else '' }}</td>
+                <td class="p-3">
+                  <a href="https://wa.me/91{{ u.phone }}" target="_blank" class="px-3 py-1 bg-emerald-100 hover:bg-emerald-600 hover:text-white text-emerald-800 rounded-lg font-bold text-[10px] transition inline-flex items-center gap-1">
+                    <i class="fab fa-whatsapp"></i> Chat Client
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <!-- Smart Assistant Query Logs & Leads -->
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+      <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-lg font-bold">
+          <i class="fas fa-comments"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">Recent Smart Assistant Query Logs & Leads</h2>
+          <p class="text-xs text-slate-500">Track questions asked to LIC MITRA by visitors.</p>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        {% for chat in chat_logs %}
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs space-y-2">
+            <div class="flex justify-between items-center text-slate-500 font-semibold text-[11px]">
+              <span><i class="fas fa-user text-blue-600 mr-1"></i> {{ chat.user_phone }} • {{ chat.user_location }}</span>
+              <span><i class="far fa-clock mr-1"></i> {{ chat.created_at.strftime('%Y-%m-%d %H:%M') if chat.created_at else '' }}</span>
+            </div>
+            <div>
+              <strong class="text-slate-900 dark:text-white">User Question:</strong>
+              <p class="text-slate-700 dark:text-slate-300 font-medium">{{ chat.message }}</p>
+            </div>
+            <div class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-600 dark:text-slate-400">
+              <strong class="text-blue-600 dark:text-blue-400">Smart Advisor Response:</strong> {{ chat.response }}
+            </div>
+          </div>
+        {% else %}
+          <p class="text-center py-6 text-slate-500 text-xs">No chat logs recorded yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

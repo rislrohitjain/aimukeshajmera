@@ -1,0 +1,530 @@
+{% extends 'base.html' %}
+
+{% block title %}Graphical Admin Dashboard | Mukesh Ajmera Control Center{% endblock %}
+
+{% block content %}
+<section class="py-12 hero-gradient-bg border-b border-slate-200 dark:border-slate-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <span class="px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 text-xs font-bold uppercase tracking-wider">Graphical Analytics & Control Center</span>
+        <h1 class="text-3xl font-black text-slate-900 dark:text-white mt-1">Mukesh Ajmera Admin Dashboard</h1>
+      </div>
+      <div class="flex gap-3">
+        <a href="{{ url_for('admin.users_list') }}" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow transition flex items-center gap-2">
+          <i class="fas fa-users"></i> User Directory & Advisory Logs
+        </a>
+      </div>
+    </div>
+
+    <!-- Quick Stats Metric Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+      <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
+        <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400 flex items-center justify-center text-xl font-bold">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div>
+          <span class="block text-2xl font-black text-slate-900 dark:text-white">{{ stats.products }}</span>
+          <span class="text-xs font-semibold text-slate-500">Active Schemes</span>
+        </div>
+      </div>
+
+      <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400 flex items-center justify-center text-xl font-bold">
+          <i class="fas fa-address-book"></i>
+        </div>
+        <div>
+          <span class="block text-2xl font-black text-slate-900 dark:text-white">{{ stats.leads }}</span>
+          <span class="text-xs font-semibold text-slate-500">Contact Form Leads</span>
+        </div>
+      </div>
+
+      <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
+        <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400 flex items-center justify-center text-xl font-bold">
+          <i class="fas fa-images"></i>
+        </div>
+        <div>
+          <span class="block text-2xl font-black text-slate-900 dark:text-white">{{ banners|length }}</span>
+          <span class="text-xs font-semibold text-slate-500">Slider Banners</span>
+        </div>
+      </div>
+
+      <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
+        <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 dark:bg-purple-900/50 dark:text-purple-400 flex items-center justify-center text-xl font-bold">
+          <i class="fas fa-brain"></i>
+        </div>
+        <div>
+          <span class="block text-sm font-black uppercase text-purple-600 dark:text-purple-400">{{ ai_setting.active_provider }}</span>
+          <span class="text-xs font-semibold text-slate-500">Smart Engine</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+
+    <!-- BANNER IMAGE SLIDER MANAGEMENT PANEL FOR ADMIN -->
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+      <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+        <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-lg font-bold">
+          <i class="fas fa-images"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">Left-Side Slider Banner Image Management</h2>
+          <p class="text-xs text-slate-500">Add, edit, and manage banner images displayed on the left side of the home page hero section.</p>
+        </div>
+      </div>
+
+      <form id="add-banner-form" class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+        <div class="sm:col-span-5">
+          <input type="url" name="image_url" placeholder="https://example.com/banner-image.jpg" required class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold">
+        </div>
+        <div class="sm:col-span-5">
+          <input type="text" name="caption" placeholder="Banner Caption / Title" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold">
+        </div>
+        <div class="sm:col-span-2">
+          <button type="submit" class="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl shadow">Add Banner</button>
+        </div>
+      </form>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for b in banners %}
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center gap-4">
+            <img src="{{ b.image_url }}" alt="Banner" class="w-16 h-16 rounded-xl object-cover border border-slate-200 dark:border-slate-700">
+            <div class="flex-1 overflow-hidden">
+              <strong class="text-xs font-bold text-slate-900 dark:text-white truncate block">{{ b.caption or 'Untitled Banner' }}</strong>
+              <span class="text-[10px] text-slate-500 truncate block">{{ b.image_url }}</span>
+            </div>
+            <button onclick="deleteBanner({{ b.id }})" class="p-2 text-rose-500 hover:text-rose-700 text-sm">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        {% else %}
+          <p class="text-xs text-slate-500 py-4 col-span-3">No custom banners added yet. Default images are currently active.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+
+    <!-- GRAPHICAL ANALYTICS CHARTS DASHBOARD SECTION -->
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+      <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 text-white flex items-center justify-center text-lg font-bold">
+          <i class="fas fa-chart-pie"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">Graphical Analytics Overview</h2>
+          <p class="text-xs text-slate-500">Real-time metrics visualization for Mukesh Ajmera LIC Portal.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
+          <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-4 text-center">LIC vs Post Office Schemes</h3>
+          <div class="relative max-h-[220px]">
+            <canvas id="categoryChart"></canvas>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
+          <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-4 text-center">User Registrations & Contact Leads</h3>
+          <div class="relative max-h-[220px]">
+            <canvas id="leadsChart"></canvas>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
+          <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-4 text-center">Smart Assistant Query Volume</h3>
+          <div class="relative max-h-[220px]">
+            <canvas id="chatsChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Contact Us Form Submissions / Leads Table -->
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+      <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-lg font-bold">
+          <i class="fas fa-phone-volume"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">Contact Us Form Leads ({{ contact_leads|length }})</h2>
+          <p class="text-xs text-slate-500">Direct consultation requests submitted by visitors.</p>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs text-slate-700 dark:text-slate-300">
+          <thead class="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-bold uppercase text-[10px]">
+            <tr>
+              <th class="p-3">ID</th>
+              <th class="p-3">User Name</th>
+              <th class="p-3">Mobile Number</th>
+              <th class="p-3">Location</th>
+              <th class="p-3">Message</th>
+              <th class="p-3">Date</th>
+              <th class="p-3">WhatsApp Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+            {% for lead in contact_leads %}
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                <td class="p-3 font-bold">#{{ lead.id }}</td>
+                <td class="p-3 font-bold text-slate-900 dark:text-white">{{ lead.name }}</td>
+                <td class="p-3 font-semibold">+91 {{ lead.phone }}</td>
+                <td class="p-3">{{ lead.location }}</td>
+                <td class="p-3 max-w-xs truncate">{{ lead.message or 'General Consultation' }}</td>
+                <td class="p-3">{{ lead.created_at.strftime('%Y-%m-%d %H:%M') if lead.created_at else '' }}</td>
+                <td class="p-3">
+                  <a href="https://wa.me/91{{ lead.phone }}?text=Hi%20{{ lead.name|urlencode }},%20this%20is%20Mukesh%20Ajmera%20from%20Sarwar.%20I%20received%20your%20inquiry." target="_blank" class="px-3 py-1 bg-emerald-100 hover:bg-emerald-600 hover:text-white text-emerald-800 rounded-lg font-bold text-[10px] transition inline-flex items-center gap-1">
+                    <i class="fab fa-whatsapp"></i> WhatsApp Reply
+                  </a>
+                </td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="7" class="p-4 text-center text-slate-500">No contact leads submitted yet.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <!-- Product Catalog CRUD with CKEditor Rich Text Input -->
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg font-bold">
+            <i class="fas fa-list-alt"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Product Catalog Management</h2>
+            <p class="text-xs text-slate-500">Manage pre-seeded 20 LIC and Post Office Plans with CKEditor Rich Text formatting.</p>
+          </div>
+        </div>
+
+        <button onclick="openProductModal()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow transition flex items-center gap-2">
+          <i class="fas fa-plus"></i> Add New Plan
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs text-slate-700 dark:text-slate-300">
+          <thead class="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-bold uppercase text-[10px]">
+            <tr>
+              <th class="p-3">ID</th>
+              <th class="p-3">Title</th>
+              <th class="p-3">Category</th>
+              <th class="p-3">Age Group</th>
+              <th class="p-3">Tax Rebate</th>
+              <th class="p-3">Status</th>
+              <th class="p-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+            {% for prod in products %}
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                <td class="p-3 font-bold">#{{ prod.id }}</td>
+                <td class="p-3 font-bold text-slate-900 dark:text-white">{{ prod.title }}</td>
+                <td class="p-3">
+                  <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold {% if prod.category == 'LIC' %}lic-badge{% else %}post-badge{% endif %}">
+                    {{ prod.category }}
+                  </span>
+                </td>
+                <td class="p-3">{{ prod.min_age }} - {{ prod.max_age }} Yrs</td>
+                <td class="p-3 font-semibold">{{ prod.tax_benefits }}</td>
+                <td class="p-3">
+                  {% if prod.is_active %}
+                    <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">Active</span>
+                  {% else %}
+                    <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-bold text-[10px]">Disabled</span>
+                  {% endif %}
+                </td>
+                <td class="p-3 flex items-center gap-2">
+                  <button onclick="toggleProduct({{ prod.id }}, {{ 'false' if prod.is_active else 'true' }})" class="p-2 text-slate-500 hover:text-blue-600" title="Toggle Active Status">
+                    <i class="fas fa-power-off"></i>
+                  </button>
+                  <button onclick="deleteProduct({{ prod.id }})" class="p-2 text-slate-500 hover:text-red-600" title="Delete Plan">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- AI SYSTEM PROMPT, VECTOR ENGINE & OFFICE LOCATION MANAGEMENT -->
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+      <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+        <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center text-lg font-bold">
+          <i class="fas fa-brain"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-slate-900 dark:text-white">AI Assistant System Prompt & Office Settings</h2>
+          <p class="text-xs text-slate-500">Configure AI provider mode, sales persona system prompt, advisor profile, and Sarwar office location.</p>
+        </div>
+      </div>
+
+      <form id="ai-settings-form" class="space-y-4 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">Active Engine Mode</label>
+            <select name="active_provider" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white">
+              <option value="vector_rag" {% if ai_setting and ai_setting.active_provider == 'vector_rag' %}selected{% endif %}>🚀 Vector RAG (Fast Vector DB Engine - Recommended)</option>
+              <option value="openai" {% if ai_setting and ai_setting.active_provider == 'openai' %}selected{% endif %}>🤖 OpenAI (GPT-4o-Mini)</option>
+              <option value="gemini" {% if ai_setting and ai_setting.active_provider == 'gemini' %}selected{% endif %}>✨ Google Gemini 1.5 Flash</option>
+              <option value="local" {% if ai_setting and ai_setting.active_provider == 'local' %}selected{% endif %}>💻 Local LLM (Ollama)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">Advisor Name</label>
+            <input type="text" name="advisor_name" value="{{ ai_setting.advisor_name if (ai_setting and ai_setting.advisor_name) else 'Mukesh Ajmera' }}" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-semibold">
+          </div>
+
+          <div>
+            <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">Office Contact Phone</label>
+            <input type="text" name="office_phone" value="{{ ai_setting.office_phone if (ai_setting and ai_setting.office_phone) else '+91 98299 43216' }}" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-semibold">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">Sarwar Office Address & Landmark</label>
+          <input type="text" name="office_address" value="{{ ai_setting.office_address if (ai_setting and ai_setting.office_address) else 'Near Bhimeshwar Mahadev, Dada Badi, Sarwar 305403, Ajmer, Rajasthan' }}" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-semibold">
+        </div>
+
+        <div>
+          <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">AI Assistant Sales System Prompt</label>
+          <textarea name="system_prompt" rows="3" class="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono text-xs leading-relaxed" placeholder="Custom System Prompt for AI Chatbot...">{{ ai_setting.system_prompt if (ai_setting and ai_setting.system_prompt) else 'You are LIC MITRA, Human-like Expert Financial Advisor for Mukesh Ajmera LIC & Post Office Services, Sarwar, Rajasthan.' }}</textarea>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">API Key (For OpenAI / Gemini)</label>
+            <input type="password" name="api_key" value="{{ ai_setting.api_key if (ai_setting and ai_setting.api_key) else '' }}" placeholder="sk-..." class="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-mono">
+          </div>
+          <div>
+            <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">Local Ollama Endpoint</label>
+            <input type="text" name="local_endpoint" value="{{ ai_setting.local_endpoint if (ai_setting and ai_setting.local_endpoint) else 'http://localhost:11434/api/generate' }}" class="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-mono">
+          </div>
+        </div>
+
+        <div class="flex justify-end">
+          <button type="submit" class="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold shadow-md transition flex items-center gap-2">
+            <i class="fas fa-save"></i> Save AI System Prompt & Office Settings
+          </button>
+        </div>
+      </form>
+    </div>
+
+
+
+<!-- Add Product Modal with CKEditor Rich Text -->
+<div id="add-product-modal" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-2xl w-full border border-slate-200 dark:border-slate-800 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+      <h3 class="font-bold text-base text-slate-900 dark:text-white">Add New LIC / Post Office Plan</h3>
+      <button onclick="$('#add-product-modal').addClass('hidden')" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
+    </div>
+
+    <form id="new-product-form" class="space-y-3 text-xs">
+      <div>
+        <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">Plan Title</label>
+        <input type="text" name="title" required placeholder="e.g. LIC Dhan Varsha" class="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">Category</label>
+          <select name="category" class="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold">
+            <option value="LIC">LIC Insurance</option>
+            <option value="POST_OFFICE">India Post Scheme</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">Tax Benefits</label>
+          <input type="text" name="tax_benefits" value="Sec 80C" class="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+        </div>
+      </div>
+
+      <div>
+        <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">Description (CKEditor Rich Text)</label>
+        <textarea name="description" id="ckeditor-product-desc" rows="4" class="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"></textarea>
+      </div>
+
+      <div>
+        <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">Key Features</label>
+        <input type="text" name="key_features" required placeholder="High Return | Guaranteed Bonus" class="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">Min Age</label>
+          <input type="number" name="min_age" value="0" class="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+        </div>
+        <div>
+          <label class="block font-bold uppercase text-slate-700 dark:text-slate-300 mb-1">Max Age</label>
+          <input type="number" name="max_age" value="65" class="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+        </div>
+      </div>
+
+      <button type="submit" class="w-full py-3 bg-blue-600 text-white font-bold rounded-xl shadow mt-2">Save Plan</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
+<script>
+let productEditorInstance = null;
+
+$(document).ready(function() {
+    ClassicEditor
+        .create(document.querySelector('#ckeditor-product-desc'))
+        .then(editor => { productEditorInstance = editor; });
+
+    // Chart 1
+    const ctxCategory = document.getElementById('categoryChart').getContext('2d');
+    new Chart(ctxCategory, {
+        type: 'doughnut',
+        data: {
+            labels: ['LIC Insurance Plans', 'Post Office Schemes'],
+            datasets: [{
+                data: [{{ stats.lic }}, {{ stats.post }}],
+                backgroundColor: ['#1e3a8a', '#dc2626'],
+                borderWidth: 0
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+
+    // Chart 2
+    const ctxLeads = document.getElementById('leadsChart').getContext('2d');
+    new Chart(ctxLeads, {
+        type: 'bar',
+        data: {
+            labels: ['Registered Users', 'Contact Form Leads', 'Subscribers'],
+            datasets: [{
+                label: 'Total Counts',
+                data: [{{ stats.users }}, {{ stats.leads }}, {{ stats.subscribers }}],
+                backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'],
+                borderRadius: 8
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+
+    // Chart 3
+    const ctxChats = document.getElementById('chatsChart').getContext('2d');
+    new Chart(ctxChats, {
+        type: 'line',
+        data: {
+            labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Today'],
+            datasets: [{
+                label: 'Smart Advisory Queries',
+                data: [2, 5, 8, 12, {{ stats.chats }}],
+                borderColor: '#8b5cf6',
+                backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+
+    // Add Banner Image Form Submit
+    $('#add-banner-form').on('submit', function(e) {
+        e.preventDefault();
+        const data = {};
+        $(this).serializeArray().forEach(item => data[item.name] = item.value);
+
+        $.ajax({
+            url: '/admin/api/banners',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function() { location.reload(); }
+        });
+    });
+
+    // Add Product Form
+    $('#new-product-form').on('submit', function(e) {
+        e.preventDefault();
+        const data = {};
+        $(this).serializeArray().forEach(item => data[item.name] = item.value);
+        if (productEditorInstance) { data['description'] = productEditorInstance.getData(); }
+
+        $.ajax({
+            url: '/admin/api/products',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function() { location.reload(); }
+        });
+    });
+
+    // AI Settings & System Prompt Form Submit
+    $('#ai-settings-form').on('submit', function(e) {
+        e.preventDefault();
+        const data = {};
+        $(this).serializeArray().forEach(item => data[item.name] = item.value);
+
+        $.ajax({
+            url: '/admin/api/ai-settings',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(res) {
+                alert(res.message || 'AI System Prompt & Settings updated!');
+                location.reload();
+            }
+        });
+    });
+});
+
+function openProductModal() { $('#add-product-modal').removeClass('hidden'); }
+
+function deleteBanner(id) {
+    if (confirm('Delete this slider banner image?')) {
+        $.ajax({
+            url: '/admin/api/banners/' + id,
+            type: 'DELETE',
+            success: function() { location.reload(); }
+        });
+    }
+}
+
+function toggleProduct(id, status) {
+    $.ajax({
+        url: '/admin/api/products/' + id,
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify({ is_active: status }),
+        success: function() { location.reload(); }
+    });
+}
+
+function deleteProduct(id) {
+    if (confirm('Are you sure you want to delete this plan?')) {
+        $.ajax({
+            url: '/admin/api/products/' + id,
+            type: 'DELETE',
+            success: function() { location.reload(); }
+        });
+    }
+}
+</script>
+{% endblock %}

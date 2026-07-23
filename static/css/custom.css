@@ -1,0 +1,285 @@
+/* Mukesh Ajmera LIC & Post Office Custom CSS */
+
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-card: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --border-color: #e2e8f0;
+  --lic-yellow: #f59e0b;
+  --lic-blue: #1e3a8a;
+  --post-red: #dc2626;
+  --post-yellow: #fbbf24;
+}
+
+[data-theme="dark"] {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-card: #1e293b;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --border-color: #334155;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.brand-gradient {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #dc2626 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-gradient-bg {
+  background: radial-gradient(circle at top right, rgba(30, 58, 138, 0.08), transparent 40%),
+              radial-gradient(circle at bottom left, rgba(220, 38, 38, 0.08), transparent 40%);
+}
+
+.lic-badge {
+  background-color: rgba(30, 58, 138, 0.1);
+  color: #1e3a8a;
+  border: 1px solid rgba(30, 58, 138, 0.2);
+}
+
+.post-badge {
+  background-color: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+/* Skeleton Loading Shimmer System */
+.skeleton-box {
+  display: inline-block;
+  height: 1em;
+  position: relative;
+  overflow: hidden;
+  background-color: #e2e8f0;
+  border-radius: 0.75rem;
+}
+
+[data-theme="dark"] .skeleton-box {
+  background-color: #334155;
+}
+
+.skeleton-box::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.3) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+  content: '';
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Custom Alert Toast for Right-Click Security */
+#security-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  transform: translateY(150%);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#security-toast.show {
+  transform: translateY(0);
+}
+
+/* Floating Chatbot Animations */
+.chat-pulse {
+  animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(37, 99, 235, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+  }
+}
+
+/* Social Media Icons Styling */
+.social-md {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.social-md ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.social-md li[role="complementary"] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.social-md a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 5px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.2s ease-in-out;
+}
+
+.social-md a:hover {
+  transform: translateY(-2px);
+  background-color: rgba(255, 255, 255, 0.25);
+  border-color: #f59e0b;
+}
+
+.social-md img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* ==========================================================================
+   COMPREHENSIVE MOBILE & TABLET RESPONSIVE ENHANCEMENTS
+   ========================================================================== */
+
+/* Prevent Horizontal Scrollbar Overflow */
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Responsive Media Elements & Embeds */
+img, iframe, video, object, embed {
+  max-width: 100%;
+}
+
+/* Responsive Table Wrapper */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom Scrollbar Utility */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Responsive Typography Adjustments for Mobile (< 640px) */
+@media (max-width: 639px) {
+  h1 {
+    font-size: 1.75rem !important; /* 28px */
+    line-height: 2.25rem !important;
+  }
+  
+  h2 {
+    font-size: 1.35rem !important; /* 21.6px */
+    line-height: 1.75rem !important;
+  }
+
+  h3 {
+    font-size: 1.15rem !important;
+    line-height: 1.5rem !important;
+  }
+
+  /* Full-width action buttons on mobile screens */
+  .mobile-w-full {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  /* Floating Chat Widget Mobile Optimization */
+  #chat-widget-window {
+    width: 95vw !important;
+    right: 2.5vw !important;
+    bottom: 80px !important;
+    height: 75vh !important;
+    max-height: 520px !important;
+  }
+
+  /* Mobile Toast positioning */
+  #security-toast {
+    left: 16px !important;
+    right: 16px !important;
+    bottom: 16px !important;
+    transform: translateY(200%);
+  }
+
+  #security-toast.show {
+    transform: translateY(0);
+  }
+}
+
+/* LIC Theme Social Media Icons System */
+.social-md ul {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.social-md ul li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.social-md img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  cursor: pointer;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+}
+
+.social-md img:hover {
+  transform: scale(1.15);
+  opacity: 0.9;
+}
+
+

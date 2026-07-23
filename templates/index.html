@@ -1,0 +1,609 @@
+{% extends 'base.html' %}
+
+{% block title %}मुकेश अजमेरा एलआईसी & पोस्ट ऑफिस | स्मार्ट वित्तीय सलाहकार सरवाड़{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section with Left-Side Image Slider -->
+<section class="relative py-16 overflow-hidden hero-gradient-bg border-b border-slate-200 dark:border-slate-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+      
+      <!-- LEFT-SIDE SMALL BANNER IMAGE SLIDER (5 Admin Managed Banners) -->
+      <div class="lg:col-span-5">
+        <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-slate-800 bg-slate-900 group">
+          
+          <div id="banner-slider-container" class="relative w-full h-[360px] sm:h-[400px]">
+            {% for banner in banners %}
+              <div class="banner-slide absolute inset-0 transition-opacity duration-700 ease-in-out bg-gradient-to-br from-slate-900 via-blue-950 to-red-950 flex flex-col justify-end p-6 {% if loop.first %}opacity-100 z-10{% else %}opacity-0 z-0{% endif %}" data-index="{{ loop.index0 }}">
+                
+                <!-- Background Image with onerror Fallback -->
+                <img src="{{ banner.image_url }}" alt="{{ banner.caption or 'मुकेश अजमेरा सेवाएं' }}" class="absolute inset-0 w-full h-full object-cover z-0" onerror="this.style.display='none';">
+                
+                <!-- Overlay Gradient Card -->
+                <div class="relative z-10 p-5 rounded-2xl bg-slate-950/85 backdrop-blur-md border border-white/10 shadow-xl space-y-2">
+                  <span class="inline-block px-3 py-1 rounded-full bg-yellow-400 text-slate-950 font-black text-[10px] uppercase tracking-wider">
+                    ⭐ मुकेश अजमेरा सरवाड़ (स्लाइड {{ loop.index }}/{{ banners|length }})
+                  </span>
+                  <p class="text-white font-bold text-sm leading-snug drop-shadow-md">
+                    {{ banner.caption or 'सुरक्षित भविष्य एवं उच्च रिटर्न - मुकेश अजमेरा एलआईसी सरवाड़' }}
+                  </p>
+                  <p class="text-[11px] text-slate-300">📞 संपर्क: +91 98299 43216 • भिमेश्वर महादेव के पास, सरवाड़</p>
+                </div>
+
+              </div>
+            {% else %}
+              <div class="banner-slide absolute inset-0 opacity-100 z-10 bg-gradient-to-br from-slate-900 via-blue-950 to-red-950 flex flex-col justify-end p-6">
+                <div class="relative z-10 p-5 rounded-2xl bg-slate-950/85 backdrop-blur-md border border-white/10 shadow-xl space-y-2">
+                  <span class="inline-block px-3 py-1 rounded-full bg-yellow-400 text-slate-950 font-black text-[10px] uppercase tracking-wider">
+                    ⭐ मुकेश अजमेरा सरवाड़
+                  </span>
+                  <p class="text-white font-bold text-sm leading-snug">सुरक्षित भविष्य एवं उच्च रिटर्न - मुकेश अजमेरा एलआईसी सरवाड़</p>
+                  <p class="text-[11px] text-slate-300">📞 संपर्क: +91 98299 43216</p>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <!-- Slider Controls -->
+          {% if banners|length > 1 %}
+            <button id="slider-prev" class="absolute left-3 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition shadow-lg">
+              <i class="fas fa-chevron-left text-xs"></i>
+            </button>
+            <button id="slider-next" class="absolute right-3 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition shadow-lg">
+              <i class="fas fa-chevron-right text-xs"></i>
+            </button>
+            
+            <!-- Slider Dots Indicator -->
+            <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex gap-1.5">
+              {% for banner in banners %}
+                <span class="slider-dot w-2 h-2 rounded-full cursor-pointer transition {% if loop.first %}bg-yellow-400 w-5{% else %}bg-white/60{% endif %}" data-target="{{ loop.index0 }}"></span>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <div class="absolute top-4 left-4 z-30 bg-blue-900/90 text-white text-[11px] font-black px-3 py-1 rounded-full shadow border border-blue-400/30">
+            🛡️ अधिकृत परामर्श केंद्र
+          </div>
+        </div>
+      </div>
+
+
+      <!-- HERO RIGHT TEXT COLUMN -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <!-- Hindi Badge -->
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase tracking-wider shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+          सरवाड़, अजमेर (राजस्थान) • अधिकृत वित्तीय परामर्श सेवा
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight text-slate-900 dark:text-white">
+          <span class="brand-gradient">एलआईसी बीमा एवं डाकघर</span> बचत योजनाओं का स्मार्ट केंद्र
+        </h1>
+
+        <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 font-normal leading-relaxed">
+          <strong>मुकेश अजमेरा एलआईसी & पोस्ट ऑफिस सेवाएं</strong> में आपका हार्दिक स्वागत है। हमारे स्मार्ट डिजिटल सहायक <em>LIC MITRA</em> से अपने परिवार के सुरक्षित भविष्य, बेटियों की उच्च शिक्षा एवं कर-मुक्त (Tax Free) रिटर्न की सर्वोत्तम योजना चुनें।
+        </p>
+
+        <!-- CTA Action Buttons -->
+        <div class="flex flex-wrap gap-4 pt-2">
+          <button onclick="$('#chat-toggle-btn').click()" class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-700 via-blue-600 to-blue-800 hover:from-blue-800 hover:to-blue-900 text-white font-bold text-sm shadow-xl shadow-blue-500/25 transition transform hover:-translate-y-0.5 flex items-center gap-2">
+            <i class="fas fa-robot text-yellow-300"></i> स्मार्ट सहायक LIC MITRA से बात करें
+          </button>
+          
+          <a href="https://wa.me/919829943216?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20%E0%A4%AE%E0%A5%81%E0%A4%95%E0%A5%87%E0%A4%B6%20%E0%A4%9C%E0%A5%80,%20%E0%A4%AE%E0%A5%88%E0%A4%82%20%E0%A4%8F%E0%A4%B2%E0%A4%AE%E0%A4%BE%E0%A4%88%E0%A4%B8%E0%A5%80%20%E0%A4%8F%E0%A4%B5%E0%A4%82%20%E0%A4%A1%E0%A4%BE%E0%A4%95%E0%A4%96%E0%A4%B0%20%E0%A4%AF%E0%A5%8B%E0%A4%9C%E0%A4%A8%E0%A4%BE%E0%A4%93%E0%A4%82%20%E0%A4%95%E0%A5%87%20%E0%A4%AC%E0%A4%BE%E0%A4%B0%E0%A5%87%20%E0%A4%AE%E0%A5%87%E0%A4%82%20%E0%A4%9C%E0%A4%BE%E0%A4%A8%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A5%80%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%A4%E0%A4%BE%20%E0%A4%B9%E0%A5%82%E0%A4%82।" target="_blank" rel="noopener" class="px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-xl shadow-emerald-600/20 transition transform hover:-translate-y-0.5 flex items-center gap-2">
+            <i class="fab fa-whatsapp text-lg"></i> सीधी व्हाट्सएप बातचीत (+91 98299 43216)
+          </a>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="pt-6 grid grid-cols-3 gap-4 border-t border-slate-200 dark:border-slate-800 text-center">
+          <div>
+            <span class="block text-2xl font-extrabold text-blue-700 dark:text-blue-400">100%</span>
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">सरकारी सुरक्षा (Sovereign)</span>
+          </div>
+          <div>
+            <span class="block text-2xl font-extrabold text-red-600 dark:text-red-400">20+</span>
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">प्रमुख योजनाएं</span>
+          </div>
+          <div>
+            <span class="block text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">Sec 80C</span>
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">100% टैक्स छूट</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- Comparison Matrix: Why LIC vs Post Office -->
+<section id="comparison" class="py-20 bg-slate-50 dark:bg-slate-900/40 border-b border-slate-200 dark:border-slate-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+      <h2 class="text-xs font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">वित्तीय तुलना तालिका</h2>
+      <h3 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">एलआईसी बनाम पोस्ट ऑफिस बचत योजनाएं</h3>
+      <p class="text-sm text-slate-600 dark:text-slate-300">जानिए दोनों योजनाओं के लाभ ताकि आप अपने परिवार के लिए सही निवेश चुन सकें।</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      
+      <!-- LIC Column -->
+      <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border-2 border-blue-500/20 shadow-xl relative overflow-hidden">
+        <div class="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-xl font-bold mb-6">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h4 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">भारतीय जीवन बीमा निगम (LIC)</h4>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mb-6">मुख्य उद्देश्य: जीवन सुरक्षा + बोनस रिटर्न + परिवार की आर्थिक सुरक्षा</p>
+        
+        <ul class="space-y-4 text-xs font-medium text-slate-700 dark:text-slate-300">
+          <li class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-emerald-500 text-base mt-0.5"></i>
+            <span><strong>गारंटीड जीवन बीमा (Life Cover):</strong> अप्रत्याशित घटना की स्थिति में परिवार को पूरी राशि का भुगतान।</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-emerald-500 text-base mt-0.5"></i>
+            <span><strong>वार्षिक बोनस लाभ:</strong> नियमित बोनस एवं फ़ाइनल एडिशनल बोनस का जुड़ना।</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-emerald-500 text-base mt-0.5"></i>
+            <span><strong>कर छूट (Tax Free):</strong> धारा 80C में प्रीमियम छूट एवं धारा 10(10D) में मेच्योरिटी पूरी तरह टैक्स फ्री!</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-emerald-500 text-base mt-0.5"></i>
+            <span><strong>आपातकालीन ऋण:</strong> 2 वर्ष बाद पॉलिसी पर कम ब्याज पर लोन सुविधा उपलब्ध।</span>
+          </li>
+        </ul>
+
+        <div class="mt-8 pt-4 border-t border-slate-100 dark:border-slate-800">
+          <span class="text-xs font-bold text-blue-600 dark:text-blue-400">लोकप्रिय योजनाएं: जीवन लाभ, जीवन उमंग, टेक टर्म</span>
+        </div>
+      </div>
+
+      <!-- Post Office Column -->
+      <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border-2 border-red-500/20 shadow-xl relative overflow-hidden">
+        <div class="w-12 h-12 rounded-2xl bg-red-600 text-white flex items-center justify-center text-xl font-bold mb-6">
+          <i class="fas fa-university"></i>
+        </div>
+        <h4 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">भारतीय डाकघर बचत योजनाएं (Post Office)</h4>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mb-6">मुख्य उद्देश्य: उच्चतम निश्चित ब्याज + शून्य जोखिम + 100% भारत सरकार की गारंटी</p>
+
+        <ul class="space-y-4 text-xs font-medium text-slate-700 dark:text-slate-300">
+          <li class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-emerald-500 text-base mt-0.5"></i>
+            <span><strong>100% भारत सरकार की गारंटी:</strong> पूंजी एवं ब्याज की शत-प्रतिशत संप्रभु सुरक्षा (Sovereign Security)।</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-emerald-500 text-base mt-0.5"></i>
+            <span><strong>उच्चतम ब्याज दर:</strong> बेटियों के लिए सुकन्या समृद्धि योजना (SSY) व वरिष्ठ नागरिकों के लिए 8.2% ब्याज!</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-emerald-500 text-base mt-0.5"></i>
+            <span><strong>ट्रिपल टैक्स फ्री (EEE):</strong> PPF एवं सुकन्या योजना में जमा, ब्याज एवं मेच्योरिटी पूर्णतः टैक्स फ्री।</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-emerald-500 text-base mt-0.5"></i>
+            <span><strong>नियमित मासिक आय:</strong> वरिष्ठ नागरिकों एवं पेंशनधारियों के लिए MIS योजना।</span>
+          </li>
+        </ul>
+
+        <div class="mt-8 pt-4 border-t border-slate-100 dark:border-slate-800">
+          <span class="text-xs font-bold text-red-600 dark:text-red-400">लोकप्रिय योजनाएं: PPF, सुकन्या समृद्धि (SSY), MIS, NSC</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- Catalog Section: 20 Pre-loaded Plans & Schemes with Active Filter Colors & Pagination -->
+<section id="plans" class="py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+      <div>
+        <h2 class="text-xs font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">अधिकृत योजना सूची</h2>
+        <h3 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-1">20 Pre-Loaded Plans & Schemes</h3>
+      </div>
+
+      <!-- Filter Pills with Active Color System -->
+      <div class="mt-6 md:mt-0 flex gap-2 overflow-x-auto pb-2">
+        <button data-category="all" class="filter-btn px-5 py-2.5 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-lg ring-2 ring-blue-400 transition">All Schemes (सभी योजनाएं)</button>
+        <button data-category="LIC" class="filter-btn px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition">LIC Plans Only (केवल एलआईसी)</button>
+        <button data-category="POST_OFFICE" class="filter-btn px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition">Post Office Schemes (केवल पोस्ट ऑफिस)</button>
+      </div>
+    </div>
+
+    <!-- Skeleton Loading Shimmer Grid -->
+    <div id="product-skeleton-grid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+      {% for i in range(6) %}
+        <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md space-y-4">
+          <div class="flex justify-between">
+            <div class="skeleton-box w-24 h-5"></div>
+            <div class="skeleton-box w-16 h-5"></div>
+          </div>
+          <div class="skeleton-box w-full h-8"></div>
+          <div class="skeleton-box w-full h-16"></div>
+          <div class="skeleton-box w-full h-10"></div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Real Product Grid -->
+    <div id="product-real-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      {% for product in lic_products %}
+        <div class="product-card bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 flex flex-col justify-between" data-category="{{ product.category }}">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider lic-badge">LIC बीमा</span>
+              <span class="text-xs font-bold text-slate-500 dark:text-slate-400">टैक्स: {{ product.tax_benefits }}</span>
+            </div>
+            
+            <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-2">{{ product.title }}</h4>
+            <p class="text-xs text-slate-600 dark:text-slate-300 mb-4 line-clamp-3 leading-relaxed">{{ product.description }}</p>
+            
+            <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 mb-4 text-xs space-y-1.5">
+              <div><strong class="text-slate-700 dark:text-slate-200">मुख्य विशेषताएं:</strong> <span class="text-slate-500 dark:text-slate-400">{{ product.key_features }}</span></div>
+              <div><strong class="text-slate-700 dark:text-slate-200">पात्रता आयु:</strong> <span class="text-slate-500 dark:text-slate-400">{{ product.min_age }} से {{ product.max_age }} वर्ष</span></div>
+            </div>
+          </div>
+
+          <a href="https://wa.me/919829943216?text=Hi%20Mukesh%20Ji,%20I%20am%20interested%20in%20{{ product.title|urlencode }}.%20Please%20send%20details." target="_blank" rel="noopener" class="w-full py-2.5 rounded-xl bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-600 hover:text-white text-blue-700 dark:text-blue-300 font-bold text-xs text-center transition flex items-center justify-center gap-2">
+            <i class="fab fa-whatsapp"></i> मुकेश अजमेरा से कोटेशन प्राप्त करें
+          </a>
+        </div>
+      {% endfor %}
+
+      {% for product in post_products %}
+        <div class="product-card bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 flex flex-col justify-between" data-category="{{ product.category }}">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider post-badge">भारतीय डाक (Post)</span>
+              <span class="text-xs font-bold text-slate-500 dark:text-slate-400">टैक्स: {{ product.tax_benefits }}</span>
+            </div>
+            
+            <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-2">{{ product.title }}</h4>
+            <p class="text-xs text-slate-600 dark:text-slate-300 mb-4 line-clamp-3 leading-relaxed">{{ product.description }}</p>
+            
+            <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 mb-4 text-xs space-y-1.5">
+              <div><strong class="text-slate-700 dark:text-slate-200">मुख्य विशेषताएं:</strong> <span class="text-slate-500 dark:text-slate-400">{{ product.key_features }}</span></div>
+              <div><strong class="text-slate-700 dark:text-slate-200">पात्रता आयु:</strong> <span class="text-slate-500 dark:text-slate-400">{{ product.min_age }} से {{ product.max_age }} वर्ष</span></div>
+            </div>
+          </div>
+
+          <a href="https://wa.me/919829943216?text=Hi%20Mukesh%20Ji,%20I%20am%20interested%20in%20{{ product.title|urlencode }}.%20Please%20send%20details." target="_blank" rel="noopener" class="w-full py-2.5 rounded-xl bg-red-50 dark:bg-red-900/30 hover:bg-red-600 hover:text-white text-red-700 dark:text-red-300 font-bold text-xs text-center transition flex items-center justify-center gap-2">
+            <i class="fab fa-whatsapp"></i> मुकेश अजमेरा से विवरण प्राप्त करें
+          </a>
+        </div>
+      {% endfor %}
+
+    </div>
+
+    <!-- Dynamic Pagination Controls Container -->
+    <div id="plan-pagination-controls" class="mt-12 flex justify-center items-center gap-2"></div>
+
+  </div>
+</section>
+
+
+<!-- CONTACT US FORM SECTION -->
+<section id="contact-us" class="py-20 bg-gradient-to-b from-slate-900 to-slate-950 text-white relative">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <div class="lg:col-span-6 space-y-6">
+        <span class="px-3.5 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider border border-emerald-500/30">
+          <i class="fas fa-headset mr-1"></i> नि:शुल्क परामर्श फॉर्म
+        </span>
+
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight">
+          मुकेश अजमेरा से <span class="text-emerald-400">सीधा संपर्क करें</span>
+        </h2>
+
+        <p class="text-sm text-slate-300 leading-relaxed">
+          नीचे अपना विवरण दर्ज करें। हम आपकी बचत और परिवार की सुरक्षा हेतु सर्वश्रेष्ठ योजना की गणना करके आपको तुरंत जानकारी देंगे।
+        </p>
+
+        <div class="space-y-4 pt-2 text-xs text-slate-300">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-slate-800 text-emerald-400 flex items-center justify-center text-sm font-bold">
+              <i class="fas fa-check"></i>
+            </div>
+            <span>कोई छिपा शुल्क नहीं • 100% निःशुल्क वित्तीय सलाह</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-slate-800 text-emerald-400 flex items-center justify-center text-sm font-bold">
+              <i class="fas fa-check"></i>
+            </div>
+            <span>सरवाड़ एवं आसपास के गांवों हेतु डोरस्टेप (घर पर) सेवा</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Us Form -->
+      <div class="lg:col-span-6">
+        <div class="bg-slate-900/90 rounded-3xl p-8 border border-slate-800 shadow-2xl space-y-5 backdrop-blur-md">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xl font-bold text-white mb-2">मुकेश अजमेरा जी से संपर्क करें</h3>
+            <span class="text-[11px] text-slate-400"><span class="text-red-500 font-bold">*</span> अनिवार्य फ़ील्ड</span>
+          </div>
+          
+          <form id="contact-us-form" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
+                पूरा नाम (Full Name) <span class="text-red-500 font-bold">*</span>
+              </label>
+              <input type="text" name="name" id="contact_name" required placeholder="अपना नाम दर्ज करें" class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
+                मोबाइल नंबर (10 अंक) <span class="text-red-500 font-bold">*</span>
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500 font-bold text-xs">+91</span>
+                <input type="tel" name="phone" id="contact_phone" required pattern="[0-9]{10}" placeholder="9829943216" class="w-full pl-12 pr-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm font-semibold focus:ring-2 focus:ring-emerald-500 outline-none">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">स्थान / गांव (Location)</label>
+              <input type="text" name="location" id="contact_location" placeholder="सरवाड़, अजमेर (राजस्थान)" class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400">संदेश / इच्छित योजना</label>
+                <button type="button" id="contact-voice-btn" class="text-xs text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-semibold">
+                  <i class="fas fa-microphone"></i> बोलकर दर्ज करें
+                </button>
+              </div>
+              <textarea name="message" id="contact_message" rows="3" placeholder="उदाहरण: मैं प्रतिमाह 5,000 रुपये जीवन लाभ या PPF में जमा करना चाहता हूँ।" class="w-full p-4 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs focus:ring-2 focus:ring-emerald-500 outline-none"></textarea>
+            </div>
+
+            <button type="submit" class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-xl transition flex items-center justify-center gap-2">
+              <i class="fas fa-paper-plane"></i> परामर्श हेतु फॉर्म सबमिट करें
+            </button>
+          </form>
+
+          <div id="contact-response" class="hidden text-xs p-3 rounded-xl"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- SUBSCRIBE NEWSLETTER WIDGET -->
+<section class="py-16 bg-blue-900 text-white relative overflow-hidden">
+  <div class="max-w-5xl mx-auto px-4 text-center space-y-6 relative z-10">
+    <div class="w-14 h-14 rounded-2xl bg-white/20 text-yellow-300 flex items-center justify-center text-2xl mx-auto">
+      <i class="fas fa-bell"></i>
+    </div>
+    
+    <h2 class="text-3xl font-extrabold">डाकघर ब्याज दर एवं एलआईसी अपडेट की सूचना पाएं</h2>
+    <p class="text-xs text-blue-100 max-w-xl mx-auto">
+      जब भी डाकघर की ब्याज दरें बदलेंगी या एलआईसी की नई योजनाएं आएंगी, आपको तुरंत जानकारी प्राप्त होगी।
+    </p>
+
+    <form id="subscribe-form" class="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
+      <input type="text" name="contact_info" id="subscribe_contact" required placeholder="अपना मोबाइल नंबर या ईमेल दर्ज करें" class="flex-1 px-4 py-3 rounded-xl bg-white text-slate-900 text-xs font-bold outline-none">
+      <button type="submit" class="px-6 py-3 rounded-xl bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg">
+        सदस्यता लें (Subscribe)
+      </button>
+    </form>
+    <div id="subscribe-response" class="hidden text-xs text-yellow-200"></div>
+  </div>
+</section>
+
+
+<!-- Direct Useful Links Section -->
+<section id="useful-links" class="py-16 bg-slate-900 text-white border-t border-b border-slate-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-10 space-y-2">
+      <h2 class="text-xs font-black uppercase tracking-widest text-amber-400">आधिकारिक वेब पोर्टल</h2>
+      <h3 class="text-2xl sm:text-3xl font-extrabold">महत्वपूर्ण डायरेक्ट लिंक</h3>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
+      
+      <a href="https://licindia.in/home" target="_blank" rel="noopener" class="p-6 rounded-2xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-blue-500 transition group">
+        <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg mb-4 group-hover:scale-110 transition">
+          <i class="fas fa-building"></i>
+        </div>
+        <h4 class="font-bold text-base text-white mb-1">एलआईसी आधिकारिक पोर्टल</h4>
+        <p class="text-xs text-slate-400">एलआईसी ऑफ इंडिया की मुख्य वेबसाइट।</p>
+      </a>
+
+      <a href="https://licindia.in/branch" target="_blank" rel="noopener" class="p-6 rounded-2xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-blue-500 transition group">
+        <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center text-lg mb-4 group-hover:scale-110 transition">
+          <i class="fas fa-search-location"></i>
+        </div>
+        <h4 class="font-bold text-base text-white mb-1">एलआईसी शाखा खोजें</h4>
+        <p class="text-xs text-slate-400">निकटतम एलआईसी ब्रांच ऑफिस ढूंढें।</p>
+      </a>
+
+      <a href="https://licindia.in/web/guest/tax-benefit" target="_blank" rel="noopener" class="p-6 rounded-2xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500 transition group">
+        <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-lg mb-4 group-hover:scale-110 transition">
+          <i class="fas fa-file-invoice-dollar"></i>
+        </div>
+        <h4 class="font-bold text-base text-white mb-1">टैक्स बचत नियम (80C)</h4>
+        <p class="text-xs text-slate-400">आयकर अधिनियम 80C एवं 10(10D) नियम।</p>
+      </a>
+
+      <a href="https://www.indiapost.gov.in/banking-services/" target="_blank" rel="noopener" class="p-6 rounded-2xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-red-500 transition group">
+        <div class="w-10 h-10 rounded-xl bg-red-600 text-white flex items-center justify-center text-lg mb-4 group-hover:scale-110 transition">
+          <i class="fas fa-university"></i>
+        </div>
+        <h4 class="font-bold text-base text-white mb-1">भारतीय डाक बैंकिंग पोर्टल</h4>
+        <p class="text-xs text-slate-400">इंडिया पोस्ट बैंकिंग बचत पोर्टल।</p>
+      </a>
+
+      <a href="https://www.google.com/maps/contrib/101065908975187739124" target="_blank" rel="noopener" class="p-6 rounded-2xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-amber-500 transition group">
+        <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-lg mb-4 group-hover:scale-110 transition">
+          <i class="fab fa-google"></i>
+        </div>
+        <h4 class="font-bold text-base text-white mb-1">गूगल मैप्स & समीक्षाएं</h4>
+        <p class="text-xs text-slate-400">मुकेश अजमेरा गूगल मैप्स रेटिंग एवं रिव्यू (5.0 ⭐)।</p>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- Sarwar Office Google Map Section -->
+<section id="contact" class="py-20 bg-slate-50 dark:bg-slate-900/50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <div class="lg:col-span-5 space-y-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 text-xs font-bold uppercase">
+          <i class="fas fa-map-marked-alt"></i> कार्यालय का पता (Sarwar Office Address)
+        </div>
+        
+        <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white">मुकेश अजमेरा (Mukesh Ajmera)</h2>
+        <p class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">वरिष्ठ एलआईसी एवं डाकघर वित्तीय सलाहकार (LIC & Post Office Senior Advisor)</p>
+
+        <div class="space-y-3 text-xs pt-2">
+          <div class="flex items-start gap-3 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <i class="fas fa-map-marker-alt text-red-500 text-lg mt-0.5"></i>
+            <div>
+              <strong class="block text-slate-900 dark:text-white">सरवाड़ कार्यालय पता (Sarwar Office Address):</strong>
+              <span class="text-slate-600 dark:text-slate-300">भिमेश्वर महादेव के पास, दादा बाड़ी के पास, सरवाड़, राजस्थान 305403</span>
+              <span class="block text-[11px] text-slate-400 mt-0.5">(Near Bhimeshwar Mahadev, Dada Badi Ke Pass, Sarwar, Rajasthan 305403)</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <i class="fab fa-whatsapp text-emerald-500 text-lg mt-0.5"></i>
+            <div>
+              <strong class="block text-slate-900 dark:text-white">फोन / व्हाट्सएप परामर्श (Call / WhatsApp Consultation):</strong>
+              <span class="text-emerald-600 dark:text-emerald-400 font-extrabold text-sm">+91 98299 43216</span>
+            </div>
+          </div>
+
+          <!-- Google Reviews & Rating Card -->
+          <div class="flex items-start gap-3 p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 shadow-sm">
+            <i class="fab fa-google text-amber-500 text-xl mt-0.5"></i>
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <strong class="text-slate-900 dark:text-white text-xs">गूगल रिव्यू एवं रेटिंग (Google Reviews):</strong>
+                <span class="px-2 py-0.5 rounded bg-amber-400 text-slate-950 font-black text-[10px]">⭐ 5.0 Rating</span>
+              </div>
+              <p class="text-slate-600 dark:text-slate-300 text-[11px]">
+                ग्राहकों के अनुभव एवं गूगल समीक्षाएं (Google Maps Contributions & Reviews).
+              </p>
+              <a href="https://www.google.com/maps/contrib/101065908975187739124" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline pt-0.5">
+                <i class="fas fa-external-link-alt text-[10px]"></i> गूगल मैप्स प्रोफाइल पर समीक्षाएं देखें (View Google Profile)
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Google Map Embed -->
+      <div class="lg:col-span-7 rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-slate-800">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4251.49580498003!2d75.0182657!3d26.0617763!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396eb53bed424e17%3A0x6c9288c1df72e7bd!2sMukesh%20Ajmera%20LIC%20%26%20Post%20Office!5e1!3m2!1sen!2sin!4v1784782005971!5m2!1sen!2sin" width="100%" height="380" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // Banner Image Slider Auto-rotation
+    const slides = $('.banner-slide');
+    const dots = $('.slider-dot');
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+
+    function showSlide(index) {
+        slides.removeClass('opacity-100 z-10').addClass('opacity-0 z-0');
+        slides.eq(index).removeClass('opacity-0 z-0').addClass('opacity-100 z-10');
+        
+        dots.removeClass('bg-yellow-400 w-5').addClass('bg-white/60 w-2');
+        dots.eq(index).removeClass('bg-white/60 w-2').addClass('bg-yellow-400 w-5');
+        currentIndex = index;
+    }
+
+    if (totalSlides > 1) {
+        $('#slider-next').on('click', function() {
+            let nextIndex = (currentIndex + 1) % totalSlides;
+            showSlide(nextIndex);
+        });
+
+        $('#slider-prev').on('click', function() {
+            let prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+            showSlide(prevIndex);
+        });
+
+        dots.on('click', function() {
+            let target = $(this).data('target');
+            showSlide(target);
+        });
+
+        // Auto rotate every 4 seconds
+        setInterval(function() {
+            let nextIndex = (currentIndex + 1) % totalSlides;
+            showSlide(nextIndex);
+        }, 4000);
+    }
+
+    // Handle Contact Form Submit
+    $('#contact-us-form').on('submit', function(e) {
+        e.preventDefault();
+        const data = {
+            name: $('#contact_name').val(),
+            phone: $('#contact_phone').val(),
+            location: $('#contact_location').val(),
+            message: $('#contact_message').val()
+        };
+
+        $.ajax({
+            url: '/contact',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(res) {
+                $('#contact-response').removeClass('hidden bg-rose-900/50 text-rose-200').addClass('bg-emerald-900/50 text-emerald-200').text(res.message);
+                $('#contact-us-form')[0].reset();
+            },
+            error: function(xhr) {
+                $('#contact-response').removeClass('hidden bg-emerald-900/50 text-emerald-200').addClass('bg-rose-900/50 text-rose-200').text('सबमिट करने में समस्या आई। कृपया पुनः प्रयास करें।');
+            }
+        });
+    });
+
+    // Handle Subscribe Form Submit
+    $('#subscribe-form').on('submit', function(e) {
+        e.preventDefault();
+        const contact = $('#subscribe_contact').val();
+
+        $.ajax({
+            url: '/subscribe',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ contact_info: contact }),
+            success: function(res) {
+                $('#subscribe-response').removeClass('hidden').text(res.message);
+                $('#subscribe_contact').val('');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
