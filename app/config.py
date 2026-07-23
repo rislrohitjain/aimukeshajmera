@@ -1,3 +1,6 @@
+import os
+from dotenv import load_dotenv
+
 # Load local environment overrides if present (.env.local), else load default production config (.env)
 if os.path.exists(".env.local"):
     load_dotenv(".env.local", override=True)
@@ -8,7 +11,7 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "mukesh_ajmera_lic_post_office_secret_key_2026")
     
     LOCAL_DB_URL = "postgresql://postgres:Admin%40123@localhost:5432/aimukeshajmera"
-    NEON_DB_URL = "postgresql://neondb_owner:npg_DYXMv5B0glPq@ep-blue-hall-ang445o4-pooler.c-6.us-east-1.aws.neon.tech/aimukeshajmera?sslmode=require&channel_binding=require"
+    NEON_DB_URL = "postgresql://neondb_owner:npg_DYXMv5B0glPq@ep-blue-hall-ang445o4-pooler.c-6.us-east-1.aws.neon.tech/aimukeshajmera?sslmode=require"
     
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", NEON_DB_URL)
     

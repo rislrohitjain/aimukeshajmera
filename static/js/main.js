@@ -185,3 +185,104 @@ function ExternalLink(url) {
     }
 }
 
+// Global Excel Exporter using SheetJS / CSV Fallback
+function exportTableToExcel(tableId, filename) {
+    const table = document.getElementById(tableId);
+    if (!table) {
+        alert('Table not found for export.');
+        return;
+    }
+    
+    filename = filename || (tableId + '_export.xlsx');
+    
+    if (typeof XLSX !== 'undefined') {
+        const wb = XLSX.utils.table_to_book(table, { sheet: "Data" });
+        XLSX.writeFile(wb, filename);
+    } else {
+        // Fallback CSV Generator
+        let csv = [];
+        const rows = table.querySelectorAll("tr");
+        for (let i = 0; i < rows.length; i++) {
+            let row = [];
+            let cols = rows[i].querySelectorAll("td, th");
+            for (let j = 0; j < cols.length; j++) {
+                let cellText = cols[j].innerText.replace(/"/g, '""').replace(/\s+/g, ' ').trim();
+                row.push('"' + cellText + '"');
+            }
+            csv.push(row.join(","));
+        }
+        const csvBlob = new Blob([csv.join("\n")], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(csvBlob);
+        link.setAttribute("download", filename.replace('.xlsx', '.csv'));
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+
+// Universal Client-Side Table Paginator (Supports 2, 5, 10, 100, 1000 items per page)
+function initTablePagination(tableId, pageSizeSelectId, infoId, prevBtnId, nextBtnId) {
+    const $table = $('#' + tableId);
+    if (!$table.length) return;
+
+    let currentPage = 1;
+    let pageSize = parseInt($('#' + pageSizeSelectId).val()) || 10;
+
+    function renderTablePage() {
+        const $rows = $table.find('tbody tr');
+        const totalRows = $rows.length;
+        if (totalRows === 0) {
+            $('#' + infoId).text('No records found');
+            $('#' + prevBtnId).prop('disabled', true);
+            $('#' + nextBtnId).prop('disabled', true);
+            return;
+        }
+
+        const totalPages = Math.ceil(totalRows / pageSize) || 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+
+        const startIndex = (currentPage - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+
+        $rows.each(function(index) {
+            if (index >= startIndex && index < endIndex) {
+                $(this).removeClass('hidden');
+            } else {
+                $(this).addClass('hidden');
+            }
+        });
+
+        const dispEnd = Math.min(endIndex, totalRows);
+        $('#' + infoId).html(`Page <strong>${currentPage}</strong> of <strong>${totalPages}</strong> (Showing ${startIndex + 1}-${dispEnd} of ${totalRows})`);
+
+        $('#' + prevBtnId).prop('disabled', currentPage === 1);
+        $('#' + nextBtnId).prop('disabled', currentPage >= totalPages);
+    }
+
+    $('#' + pageSizeSelectId).on('change', function() {
+        pageSize = parseInt($(this).val()) || 10;
+        currentPage = 1;
+        renderTablePage();
+    });
+
+    $('#' + prevBtnId).on('click', function() {
+        if (currentPage > 1) {
+            currentPage--;
+            renderTablePage();
+        }
+    });
+
+    $('#' + nextBtnId).on('click', function() {
+        const totalRows = $table.find('tbody tr').length;
+        const totalPages = Math.ceil(totalRows / pageSize) || 1;
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderTablePage();
+        }
+    });
+
+    renderTablePage();
+}
+

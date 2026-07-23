@@ -148,18 +148,46 @@
 
     <!-- Contact Us Form Submissions / Leads Table -->
     <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
-      <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
-        <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-lg font-bold">
-          <i class="fas fa-phone-volume"></i>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-lg font-bold">
+            <i class="fas fa-phone-volume"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Contact Us Form Leads ({{ contact_leads|length }})</h2>
+            <p class="text-xs text-slate-500">Direct consultation requests submitted by visitors.</p>
+          </div>
         </div>
-        <div>
-          <h2 class="text-xl font-bold text-slate-900 dark:text-white">Contact Us Form Leads ({{ contact_leads|length }})</h2>
-          <p class="text-xs text-slate-500">Direct consultation requests submitted by visitors.</p>
+
+        <button onclick="exportTableToExcel('leads-table', 'Contact_Leads_Mukesh_Ajmera.xlsx')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition inline-flex items-center gap-1.5 self-start sm:self-center">
+          <i class="fas fa-file-excel text-sm"></i> Export to Excel (.xlsx)
+        </button>
+      </div>
+
+      <!-- Pagination & Row Count Control Bar -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
+        <div class="flex items-center gap-2">
+          <label class="font-bold text-slate-700 dark:text-slate-300">Show Rows:</label>
+          <select id="leads-page-size" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white outline-none">
+            <option value="2">2 per page</option>
+            <option value="5">5 per page</option>
+            <option value="10" selected>10 per page</option>
+            <option value="100">100 per page</option>
+            <option value="1000">1000 per page</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div id="leads-page-info" class="text-slate-500 font-medium">Page 1 of 1</div>
+          <div class="flex items-center gap-1">
+            <button id="leads-prev-btn" class="px-3 py-1 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white font-bold disabled:opacity-50 transition">Prev</button>
+            <button id="leads-next-btn" class="px-3 py-1 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white font-bold disabled:opacity-50 transition">Next</button>
+          </div>
         </div>
       </div>
 
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs text-slate-700 dark:text-slate-300">
+        <table id="leads-table" class="w-full text-left text-xs text-slate-700 dark:text-slate-300">
           <thead class="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-bold uppercase text-[10px]">
             <tr>
               <th class="p-3">ID</th>
@@ -199,7 +227,7 @@
 
     <!-- Product Catalog CRUD with CKEditor Rich Text Input -->
     <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
-      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg font-bold">
             <i class="fas fa-list-alt"></i>
@@ -210,13 +238,40 @@
           </div>
         </div>
 
-        <button onclick="openProductModal()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow transition flex items-center gap-2">
-          <i class="fas fa-plus"></i> Add New Plan
-        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="exportTableToExcel('products-table', 'Product_Catalog_Mukesh_Ajmera.xlsx')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition inline-flex items-center gap-1.5">
+            <i class="fas fa-file-excel text-sm"></i> Export to Excel (.xlsx)
+          </button>
+          <button onclick="openProductModal()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow transition flex items-center gap-2">
+            <i class="fas fa-plus"></i> Add New Plan
+          </button>
+        </div>
+      </div>
+
+      <!-- Pagination & Row Count Control Bar for Product Catalog -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
+        <div class="flex items-center gap-2">
+          <label class="font-bold text-slate-700 dark:text-slate-300">Show Rows:</label>
+          <select id="products-page-size" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white outline-none">
+            <option value="2">2 per page</option>
+            <option value="5">5 per page</option>
+            <option value="10" selected>10 per page</option>
+            <option value="100">100 per page</option>
+            <option value="1000">1000 per page</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div id="products-page-info" class="text-slate-500 font-medium">Page 1 of 1</div>
+          <div class="flex items-center gap-1">
+            <button id="products-prev-btn" class="px-3 py-1 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white font-bold disabled:opacity-50 transition">Prev</button>
+            <button id="products-next-btn" class="px-3 py-1 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white font-bold disabled:opacity-50 transition">Next</button>
+          </div>
+        </div>
       </div>
 
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs text-slate-700 dark:text-slate-300">
+        <table id="products-table" class="w-full text-left text-xs text-slate-700 dark:text-slate-300">
           <thead class="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-bold uppercase text-[10px]">
             <tr>
               <th class="p-3">ID</th>
@@ -475,6 +530,10 @@ $(document).ready(function() {
             success: function() { location.reload(); }
         });
     });
+
+    // Initialize Table Paginations (2, 5, 10, 100, 1000 per page)
+    initTablePagination('leads-table', 'leads-page-size', 'leads-page-info', 'leads-prev-btn', 'leads-next-btn');
+    initTablePagination('products-table', 'products-page-size', 'products-page-info', 'products-prev-btn', 'products-next-btn');
 
     // AI Settings & System Prompt Form Submit
     $('#ai-settings-form').on('submit', function(e) {

@@ -22,18 +22,46 @@
 
     <!-- Registered Users Directory -->
     <div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
-      <div class="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
-        <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg font-bold">
-          <i class="fas fa-users"></i>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg font-bold">
+            <i class="fas fa-users"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Registered Users ({{ users|length }})</h2>
+            <p class="text-xs text-slate-500">Clients registered via mobile number access.</p>
+          </div>
         </div>
-        <div>
-          <h2 class="text-xl font-bold text-slate-900 dark:text-white">Registered Users ({{ users|length }})</h2>
-          <p class="text-xs text-slate-500">Clients registered via mobile number access.</p>
+
+        <button onclick="exportTableToExcel('users-table', 'User_Directory_Mukesh_Ajmera.xlsx')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition inline-flex items-center gap-1.5 self-start sm:self-center">
+          <i class="fas fa-file-excel text-sm"></i> Export to Excel (.xlsx)
+        </button>
+      </div>
+
+      <!-- Pagination & Row Count Control Bar -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
+        <div class="flex items-center gap-2">
+          <label class="font-bold text-slate-700 dark:text-slate-300">Show Rows:</label>
+          <select id="users-page-size" class="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white outline-none">
+            <option value="2">2 per page</option>
+            <option value="5">5 per page</option>
+            <option value="10" selected>10 per page</option>
+            <option value="100">100 per page</option>
+            <option value="1000">1000 per page</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div id="users-page-info" class="text-slate-500 font-medium">Page 1 of 1</div>
+          <div class="flex items-center gap-1">
+            <button id="users-prev-btn" class="px-3 py-1 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white font-bold disabled:opacity-50 transition">Prev</button>
+            <button id="users-next-btn" class="px-3 py-1 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white font-bold disabled:opacity-50 transition">Next</button>
+          </div>
         </div>
       </div>
 
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs text-slate-700 dark:text-slate-300">
+        <table id="users-table" class="w-full text-left text-xs text-slate-700 dark:text-slate-300">
           <thead class="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-bold uppercase text-[10px]">
             <tr>
               <th class="p-3">ID</th>
@@ -108,4 +136,12 @@
 
   </div>
 </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    initTablePagination('users-table', 'users-page-size', 'users-page-info', 'users-prev-btn', 'users-next-btn');
+});
+</script>
 {% endblock %}

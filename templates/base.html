@@ -166,10 +166,11 @@
     </div>
   </footer>
 
-  <!-- jQuery & Main JS with Cache-Busting -->
+  <!-- jQuery, SheetJS Excel Exporter & Main JS with Cache-Busting -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="{{ url_for('static', filename='js/main.js') }}?v=20260723_2"></script>
-  <script src="{{ url_for('static', filename='js/chat.js') }}?v=20260723_2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}?v=20260723_3"></script>
+  <script src="{{ url_for('static', filename='js/chat.js') }}?v=20260723_3"></script>
 
   {% block scripts %}{% endblock %}
 </body>

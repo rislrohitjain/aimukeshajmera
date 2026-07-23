@@ -32,3 +32,5 @@ wheels/
 Thumbs.db
 ~$*
 *.tmp
+
+.vercel
