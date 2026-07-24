@@ -18,6 +18,9 @@
         <h1 class="text-3xl font-black text-slate-900 dark:text-white mt-1">Mukesh Ajmera Admin Dashboard</h1>
       </div>
       <div class="flex gap-3">
+        <a href="{{ url_for('admin.swagger_ui') }}" target="_blank" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs shadow-md transition flex items-center gap-2">
+          <i class="fas fa-code"></i> Swagger API Docs
+        </a>
         <a href="{{ url_for('admin.users_list') }}" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow transition flex items-center gap-2">
           <i class="fas fa-users"></i> User Directory & Advisory Logs
         </a>

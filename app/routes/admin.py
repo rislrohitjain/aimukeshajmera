@@ -133,6 +133,78 @@ def update_or_delete_lead(id):
     db.session.commit()
     return jsonify({"success": True, "message": "Lead updated successfully!"})
 
+import base64
+import io
+
+def save_banner_file(file):
+    """
+    Saves uploaded image file to static folder if writable.
+    If running on serverless read-only filesystem (like Vercel),
+    gracefully compresses & encodes image as a Base64 Data URI.
+    """
+    filename = f"banner_{int(time.time())}_{secure_filename(file.filename)}"
+    ext = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else ''
+    
+    # Try local filesystem save first
+    try:
+        upload_folder_static = os.path.join(current_app.root_path, '..', 'static', 'uploads', 'banners')
+        os.makedirs(upload_folder_static, exist_ok=True)
+        save_path = os.path.join(upload_folder_static, filename)
+        file.seek(0)
+        file.save(save_path)
+
+        try:
+            upload_folder_public = os.path.join(current_app.root_path, '..', 'public', 'static', 'uploads', 'banners')
+            if os.path.exists(os.path.join(current_app.root_path, '..', 'public')):
+                os.makedirs(upload_folder_public, exist_ok=True)
+                import shutil
+                shutil.copy(save_path, os.path.join(upload_folder_public, filename))
+        except Exception as e:
+            print(f"Notice public folder upload copy: {e}")
+
+        return f"/static/uploads/banners/{filename}"
+    except (OSError, PermissionError) as err:
+        print(f"Serverless/Read-Only filesystem detected ({err}). Converting banner upload to Base64 Data URI.")
+        file.seek(0)
+        file_bytes = file.read()
+
+        mime_type = 'image/jpeg'
+        if ext in ['png', 'gif', 'webp', 'svg']:
+            mime_type = f'image/{ext}'
+            if ext == 'svg':
+                mime_type = 'image/svg+xml'
+
+        try:
+            from PIL import Image
+            img = Image.open(io.BytesIO(file_bytes))
+            
+            # Compress & Resize if large (max dimension 1200px)
+            max_dim = 1200
+            if img.width > max_dim or img.height > max_dim:
+                img.thumbnail((max_dim, max_dim), Image.Resampling.LANCZOS)
+
+            out_buf = io.BytesIO()
+            if ext in ['jpg', 'jpeg']:
+                img.convert('RGB').save(out_buf, format='JPEG', quality=82, optimize=True)
+                mime_type = 'image/jpeg'
+            elif ext == 'webp':
+                img.save(out_buf, format='WEBP', quality=82)
+                mime_type = 'image/webp'
+            elif ext == 'png':
+                img.save(out_buf, format='PNG', optimize=True)
+                mime_type = 'image/png'
+            else:
+                out_buf.write(file_bytes)
+
+            compressed_bytes = out_buf.getvalue()
+            b64_str = base64.b64encode(compressed_bytes).decode('utf-8')
+            return f"data:{mime_type};base64,{b64_str}"
+        except Exception as img_err:
+            print(f"Base64 compression fallback notice: {img_err}")
+            b64_str = base64.b64encode(file_bytes).decode('utf-8')
+            return f"data:{mime_type};base64,{b64_str}"
+
+
 # ----------------- BANNER IMAGES API & FILE UPLOAD WITH VALIDATION -----------------
 @admin_bp.route('/api/upload-banner', methods=['POST'])
 @login_required
@@ -176,24 +248,11 @@ def upload_banner_image():
         except Exception as e:
             file.seek(0)
 
-    filename = f"banner_{int(time.time())}_{secure_filename(file.filename)}"
-    
-    upload_folder_static = os.path.join(current_app.root_path, '..', 'static', 'uploads', 'banners')
-    upload_folder_public = os.path.join(current_app.root_path, '..', 'public', 'static', 'uploads', 'banners')
-    
-    os.makedirs(upload_folder_static, exist_ok=True)
-    save_path = os.path.join(upload_folder_static, filename)
-    file.save(save_path)
-
     try:
-        if os.path.exists(os.path.join(current_app.root_path, '..', 'public')):
-            os.makedirs(upload_folder_public, exist_ok=True)
-            import shutil
-            shutil.copy(save_path, os.path.join(upload_folder_public, filename))
+        image_url = save_banner_file(file)
     except Exception as e:
-        print(f"Notice public folder upload copy: {e}")
+        return jsonify({"success": False, "message": f"Failed to save banner image: {str(e)}"}), 500
 
-    image_url = f"/static/uploads/banners/{filename}"
     return jsonify({
         "success": True,
         "image_url": image_url,
@@ -209,16 +268,10 @@ def upload_banner_image():
 @admin_required
 def manage_banners():
     if request.method == 'POST':
-        # Check if file attached directly
         image_url = None
         if 'file' in request.files and request.files['file'].filename != '':
             file = request.files['file']
-            filename = f"banner_{int(time.time())}_{secure_filename(file.filename)}"
-            upload_folder_static = os.path.join(current_app.root_path, '..', 'static', 'uploads', 'banners')
-            os.makedirs(upload_folder_static, exist_ok=True)
-            save_path = os.path.join(upload_folder_static, filename)
-            file.save(save_path)
-            image_url = f"/static/uploads/banners/{filename}"
+            image_url = save_banner_file(file)
 
         data = request.get_json() or request.form
         if not image_url:
@@ -263,12 +316,7 @@ def update_or_delete_banner(id):
 
     if 'file' in request.files and request.files['file'].filename != '':
         file = request.files['file']
-        filename = f"banner_{int(time.time())}_{secure_filename(file.filename)}"
-        upload_folder_static = os.path.join(current_app.root_path, '..', 'static', 'uploads', 'banners')
-        os.makedirs(upload_folder_static, exist_ok=True)
-        save_path = os.path.join(upload_folder_static, filename)
-        file.save(save_path)
-        banner.image_url = f"/static/uploads/banners/{filename}"
+        banner.image_url = save_banner_file(file)
     elif 'image_url' in data and data.get('image_url'):
         banner.image_url = data.get('image_url')
 
@@ -392,4 +440,277 @@ def update_ai_settings():
 
     db.session.commit()
     return jsonify({"success": True, "message": "Vector AI Engine & Office Location settings updated successfully!"})
+
+
+# ----------------- SWAGGER OPENAPI 3.0 SPECIFICATION & INTERACTIVE UI (ADMIN PROTECTED) -----------------
+@admin_bp.route('/swagger')
+@login_required
+@admin_required
+def swagger_ui():
+    return render_template('admin/swagger.html')
+
+
+@admin_bp.route('/swagger.json')
+@login_required
+@admin_required
+def swagger_spec():
+    spec = {
+        "openapi": "3.0.3",
+        "info": {
+            "title": "Mukesh Ajmera Financial Advisory & Insurance Portal API",
+            "description": "Comprehensive REST API documentation for Mukesh Ajmera LIC & Post Office Advisory platform. Strictly restricted to authenticated administrators.",
+            "version": "1.0.0",
+            "contact": {
+                "name": "Mukesh Ajmera Advisory",
+                "phone": "+91 98299 43216",
+                "address": "Sarwar, Ajmer, Rajasthan"
+            }
+        },
+        "servers": [
+            {
+                "url": "https://aimukeshajmera.vercel.app",
+                "description": "Live Vercel Production Server"
+            },
+            {
+                "url": "http://127.0.0.1:5050",
+                "description": "Local Development Server"
+            }
+        ],
+        "tags": [
+            {"name": "Admin Banners", "description": "Slider Banner Images Upload and Management"},
+            {"name": "Admin Products", "description": "LIC & Post Office Plan Catalog Management"},
+            {"name": "Admin Leads", "description": "Customer Inquiry Leads & Consultation Requests"},
+            {"name": "Admin AI & System Settings", "description": "AI Assistant System Prompt & Office Configuration"},
+            {"name": "Admin Sitemap", "description": "Dynamic Sitemap URL Management"},
+            {"name": "Public AI Chat", "description": "Smart Financial Advisor Chatbot API"},
+            {"name": "Public Client Services", "description": "Contact Lead Form Submission & Newsletter Subscription"},
+            {"name": "System Health", "description": "Database Connection & System Metrics Check"}
+        ],
+        "paths": {
+            "/admin/api/upload-banner": {
+                "post": {
+                    "tags": ["Admin Banners"],
+                    "summary": "Upload and validate banner image file (supports local storage & serverless Base64 fallback)",
+                    "requestBody": {
+                        "content": {
+                            "multipart/form-data": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "file": {
+                                            "type": "string",
+                                            "format": "binary",
+                                            "description": "Image file (Max 5MB, Min 400x300px, Allowed: PNG, JPG, JPEG, WEBP, SVG)"
+                                        }
+                                    },
+                                    "required": ["file"]
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Banner uploaded and validated successfully",
+                            "content": {
+                                "application/json": {
+                                    "example": {
+                                        "success": True,
+                                        "image_url": "/static/uploads/banners/banner_1720000000_sample.png",
+                                        "width": 1200,
+                                        "height": 800,
+                                        "size_kb": 256.4,
+                                        "message": "Banner image validated and uploaded successfully!"
+                                    }
+                                }
+                            }
+                        },
+                        "400": {"description": "Validation failure (file size, dimensions, or missing file)"},
+                        "401": {"description": "Unauthorized access"},
+                        "403": {"description": "Forbidden - Admin privilege required"}
+                    }
+                }
+            },
+            "/admin/api/banners": {
+                "get": {
+                    "tags": ["Admin Banners"],
+                    "summary": "Get list of all slider banner images",
+                    "responses": {
+                        "200": {"description": "List of slider banners"}
+                    }
+                },
+                "post": {
+                    "tags": ["Admin Banners"],
+                    "summary": "Add a new slider banner item",
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "image_url": {"type": "string"},
+                                        "caption": {"type": "string"},
+                                        "description": {"type": "string"},
+                                        "order": {"type": "integer"}
+                                    },
+                                    "required": ["image_url"]
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {"description": "Banner created successfully"}
+                    }
+                }
+            },
+            "/admin/api/banners/{id}": {
+                "put": {
+                    "tags": ["Admin Banners"],
+                    "summary": "Update an existing slider banner",
+                    "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "image_url": {"type": "string"},
+                                        "caption": {"type": "string"},
+                                        "description": {"type": "string"},
+                                        "order": {"type": "integer"},
+                                        "is_active": {"type": "boolean"}
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "responses": {"200": {"description": "Banner updated successfully"}}
+                },
+                "delete": {
+                    "tags": ["Admin Banners"],
+                    "summary": "Delete a slider banner item",
+                    "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "Banner deleted successfully"}}
+                }
+            },
+            "/admin/api/products": {
+                "post": {
+                    "tags": ["Admin Products"],
+                    "summary": "Create new LIC or Post Office financial scheme",
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "title": {"type": "string"},
+                                        "category": {"type": "string", "enum": ["LIC", "POST_OFFICE"]},
+                                        "description": {"type": "string"},
+                                        "key_features": {"type": "string"},
+                                        "min_age": {"type": "integer"},
+                                        "max_age": {"type": "integer"},
+                                        "tax_benefits": {"type": "string"}
+                                    },
+                                    "required": ["title", "category", "description"]
+                                }
+                            }
+                        }
+                    },
+                    "responses": {"200": {"description": "Plan added successfully!"}}
+                }
+            },
+            "/admin/api/products/{id}": {
+                "put": {
+                    "tags": ["Admin Products"],
+                    "summary": "Update plan status (Active/Disabled)",
+                    "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "Product updated"}}
+                },
+                "delete": {
+                    "tags": ["Admin Products"],
+                    "summary": "Delete plan from catalog",
+                    "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "Product deleted"}}
+                }
+            },
+            "/admin/api/leads/{id}": {
+                "put": {
+                    "tags": ["Admin Leads"],
+                    "summary": "Update customer lead status or details",
+                    "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "Lead updated"}}
+                },
+                "delete": {
+                    "tags": ["Admin Leads"],
+                    "summary": "Delete client lead record",
+                    "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "Lead deleted"}}
+                }
+            },
+            "/admin/api/sitemap": {
+                "post": {
+                    "tags": ["Admin Sitemap"],
+                    "summary": "Add URL path to sitemap.xml",
+                    "responses": {"200": {"description": "Sitemap URL added"}}
+                }
+            },
+            "/admin/api/sitemap/{id}": {
+                "delete": {
+                    "tags": ["Admin Sitemap"],
+                    "summary": "Remove URL from sitemap.xml",
+                    "parameters": [{"name": "id", "in": "path", "required": True, "schema": {"type": "integer"}}],
+                    "responses": {"200": {"description": "Sitemap URL deleted"}}
+                }
+            },
+            "/admin/api/ai-settings": {
+                "post": {
+                    "tags": ["Admin AI & System Settings"],
+                    "summary": "Update Vector RAG engine system prompt, advisor info, and office location",
+                    "responses": {"200": {"description": "Settings saved successfully"}}
+                }
+            },
+            "/api/chat": {
+                "post": {
+                    "tags": ["Public AI Chat"],
+                    "summary": "Smart Advisory AI Assistant endpoint",
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {"type": "string"}
+                                    },
+                                    "required": ["message"]
+                                }
+                            }
+                        }
+                    },
+                    "responses": {"200": {"description": "AI recommendation & plan response"}}
+                }
+            },
+            "/contact": {
+                "post": {
+                    "tags": ["Public Client Services"],
+                    "summary": "Submit consultation / callback inquiry",
+                    "responses": {"200": {"description": "Inquiry recorded"}}
+                }
+            },
+            "/subscribe": {
+                "post": {
+                    "tags": ["Public Client Services"],
+                    "summary": "Subscribe mobile / email for interest rate alerts",
+                    "responses": {"200": {"description": "Subscribed successfully"}}
+                }
+            },
+            "/checkdb": {
+                "get": {
+                    "tags": ["System Health"],
+                    "summary": "Database connectivity and metrics check",
+                    "responses": {"200": {"description": "Database online"}}
+                }
+            }
+        }
+    }
+    return jsonify(spec)
+
 

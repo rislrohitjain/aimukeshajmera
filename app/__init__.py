@@ -65,6 +65,8 @@ def create_app():
             db.session.execute(text("ALTER TABLE contact_leads ADD COLUMN IF NOT EXISTS interested_plan VARCHAR(200);"))
             db.session.execute(text("ALTER TABLE contact_leads ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'New Lead';"))
             db.session.execute(text("ALTER TABLE banner_images ADD COLUMN IF NOT EXISTS description TEXT;"))
+            db.session.execute(text("ALTER TABLE banner_images ALTER COLUMN image_url TYPE TEXT;"))
+            db.session.execute(text("ALTER TABLE blogs ALTER COLUMN image_url TYPE TEXT;"))
             db.session.commit()
         except Exception as e:
             db.session.rollback()

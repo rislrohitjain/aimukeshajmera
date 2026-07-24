@@ -109,6 +109,14 @@
         <i class="fas fa-chevron-right text-[10px] text-slate-500"></i>
       </a>
 
+      <a href="{{ url_for('admin.swagger_ui') }}" target="_blank" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-slate-800 text-slate-200 hover:text-white transition group {% if request.endpoint == 'admin.swagger_ui' %}bg-purple-600 text-white shadow-md font-extrabold{% endif %}">
+        <span class="flex items-center gap-2.5">
+          <i class="fas fa-code text-blue-400 group-hover:scale-110 transition"></i> 
+          <span>Swagger API Docs</span>
+        </span>
+        <i class="fas fa-external-link-alt text-[9px] text-slate-400"></i>
+      </a>
+
       <a href="{{ url_for('main.index') }}" target="_blank" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-slate-800 text-slate-200 hover:text-white transition group">
         <span class="flex items-center gap-2.5">
           <i class="fas fa-globe text-emerald-400 group-hover:scale-110 transition"></i> 

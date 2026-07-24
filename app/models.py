@@ -48,7 +48,7 @@ class Blog(db.Model):
     slug = db.Column(db.String(250), unique=True, nullable=False)
     content = db.Column(db.Text, nullable=False)
     author = db.Column(db.String(100), default='Mukesh Ajmera')
-    image_url = db.Column(db.String(500), nullable=True)
+    image_url = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
@@ -115,7 +115,7 @@ class BannerImage(db.Model):
     __tablename__ = 'banner_images'
     
     id = db.Column(db.Integer, primary_key=True)
-    image_url = db.Column(db.String(500), nullable=False)
+    image_url = db.Column(db.Text, nullable=False)
     caption = db.Column(db.String(250), nullable=True)
     description = db.Column(db.Text, nullable=True)
     order = db.Column(db.Integer, default=0)
