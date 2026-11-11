@@ -40,17 +40,21 @@ def seed_database():
     # 3. Seed Sitemap URLs (Public Indexable pages only)
     default_sitemaps = [
         {"url_path": "/", "priority": "1.0"},
-        {"url_path": "/login", "priority": "0.8"},
-        {"url_path": "/blogs", "priority": "0.9"}
+        {"url_path": "/about-mukesh-ajmera", "priority": "0.9"},
+        {"url_path": "/lic-services-sarwar", "priority": "0.9"},
+        {"url_path": "/post-office-schemes", "priority": "0.9"},
+        {"url_path": "/contact", "priority": "0.8"},
+        {"url_path": "/blogs", "priority": "0.8"}
     ]
     for sm in default_sitemaps:
         if not SitemapUrl.query.filter_by(url_path=sm["url_path"]).first():
             db.session.add(SitemapUrl(**sm))
 
-    # Remove any existing /checkdb sitemap url entry
-    old_sm = SitemapUrl.query.filter_by(url_path="/checkdb").first()
-    if old_sm:
-        db.session.delete(old_sm)
+    # Remove any existing /checkdb or /login sitemap url entries
+    for unwanted_path in ["/checkdb", "/login"]:
+        old_sm = SitemapUrl.query.filter_by(url_path=unwanted_path).first()
+        if old_sm:
+            db.session.delete(old_sm)
 
     # 4. Seed Default Banner Slider Images
     default_banners = [

@@ -45,15 +45,14 @@
         </div>
       </a>
 
-      <!-- Desktop Navigation Menu Links (In Clear Hindi) -->
-      <nav class="hidden lg:flex items-center gap-3 xl:gap-5 font-bold text-xs xl:text-sm text-slate-700 dark:text-slate-200 shrink-0">
+      <!-- Desktop Navigation Menu Links -->
+      <nav class="hidden lg:flex items-center gap-2.5 xl:gap-4 font-bold text-xs xl:text-sm text-slate-700 dark:text-slate-200 shrink-0">
         <a href="{{ url_for('main.index') }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition py-1 whitespace-nowrap">मुख्य पृष्ठ</a>
-        <a href="{{ url_for('main.index') }}#plans" class="hover:text-blue-600 dark:hover:text-blue-400 transition py-1 whitespace-nowrap">एलआईसी योजनाएं</a>
-        <a href="{{ url_for('main.index') }}#plans" class="hover:text-red-600 dark:hover:text-red-400 transition py-1 whitespace-nowrap">डाकघर बचत योजनाएं</a>
-        <a href="{{ url_for('main.index') }}#comparison" class="hover:text-blue-600 dark:hover:text-blue-400 transition py-1 whitespace-nowrap">तुलना चार्ट</a>
-        <a href="{{ url_for('main.index') }}#contact-us" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition py-1 text-emerald-600 font-bold whitespace-nowrap"><i class="fas fa-envelope mr-1"></i> संपर्क करें</a>
-        <a href="{{ url_for('blog.list_blogs') }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition py-1 whitespace-nowrap">मार्गदर्शिका एवं ब्लॉग</a>
-        <a href="{{ url_for('main.index') }}#useful-links" class="hover:text-amber-500 transition py-1 whitespace-nowrap">महत्वपूर्ण लिंक</a>
+        <a href="{{ url_for('main.about') }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition py-1 whitespace-nowrap">परिचय (About)</a>
+        <a href="{{ url_for('main.lic_services') }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition py-1 whitespace-nowrap">एलआईसी सेवाएं</a>
+        <a href="{{ url_for('main.post_office_schemes') }}" class="hover:text-red-600 dark:hover:text-red-400 transition py-1 whitespace-nowrap">डाकघर योजनाएं</a>
+        <a href="{{ url_for('blog.list_blogs') }}" class="hover:text-blue-600 dark:hover:text-blue-400 transition py-1 whitespace-nowrap">मार्गदर्शिका</a>
+        <a href="{{ url_for('main.contact') }}" class="px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 hover:bg-emerald-600 hover:text-white transition font-bold whitespace-nowrap flex items-center gap-1.5"><i class="fas fa-phone-alt text-[10px]"></i> संपर्क करें</a>
       </nav>
 
       <!-- Right User Controls & Actions -->
@@ -95,13 +94,12 @@
   </div>
 
   <!-- Mobile Dropdown Menu -->
-  <div id="mobile-menu" class="hidden lg:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 pt-3 pb-6 space-y-3 font-bold text-sm">
-    <a href="{{ url_for('main.index') }}" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">मुख्य पृष्ठ</a>
-    <a href="{{ url_for('main.index') }}#plans" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">एलआईसी योजनाएं</a>
-    <a href="{{ url_for('main.index') }}#plans" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">डाकघर बचत योजनाएं</a>
-    <a href="{{ url_for('main.index') }}#comparison" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">तुलना चार्ट</a>
-    <a href="{{ url_for('main.index') }}#contact-us" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-emerald-600 font-bold">संपर्क करें (Contact Us)</a>
-    <a href="{{ url_for('blog.list_blogs') }}" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">मार्गदर्शिका एवं ब्लॉग</a>
-    <a href="{{ url_for('main.index') }}#useful-links" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">महत्वपूर्ण लिंक</a>
+  <div id="mobile-menu" class="hidden lg:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 pt-3 pb-6 space-y-2 font-bold text-sm">
+    <a href="{{ url_for('main.index') }}" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">मुख्य पृष्ठ (Home)</a>
+    <a href="{{ url_for('main.about') }}" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">परिचय (About Mukesh Ajmera)</a>
+    <a href="{{ url_for('main.lic_services') }}" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">एलआईसी सेवाएं (LIC Plans)</a>
+    <a href="{{ url_for('main.post_office_schemes') }}" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">डाकघर बचत योजनाएं (Post Office Schemes)</a>
+    <a href="{{ url_for('blog.list_blogs') }}" class="block p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">मार्गदर्शिका एवं ब्लॉग (Guides)</a>
+    <a href="{{ url_for('main.contact') }}" class="block p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 font-bold">संपर्क करें (Contact Us)</a>
   </div>
 </header>
