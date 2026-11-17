@@ -94,12 +94,39 @@ def contact():
 
     return render_template('contact.html')
 
+@main_bp.route('/BingSiteAuth.xml')
+def bing_site_auth():
+    content = """<?xml version="1.0"?>
+<users>
+	<user>E4F05BA18384A6870ED8DFEA1122335A</user>
+</users>"""
+    return Response(content, mimetype='text/xml')
+
 @main_bp.route('/robots.txt')
 def robots_txt():
     content = """User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /checkdb
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /checkdb
+
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+Disallow: /checkdb
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
 
 Sitemap: https://aimukeshajmera.vercel.app/sitemap.xml
 """

@@ -38,7 +38,8 @@ def run_seo_tests():
         ('/blogs', 'Blogs Listing Page'),
         ('/blog/ppf-vs-lic-guide', 'Blog Detail Page'),
         ('/robots.txt', 'Robots.txt'),
-        ('/sitemap.xml', 'XML Sitemap')
+        ('/sitemap.xml', 'XML Sitemap'),
+        ('/BingSiteAuth.xml', 'Bing Site Auth XML')
     ]
 
     for path, name in routes_to_test:
@@ -80,6 +81,14 @@ def run_seo_tests():
     # Ensure no old local IP addresses
     assert '172.18.' not in sitemap_xml and 'localhost' not in sitemap_xml, "Local IP / localhost found in sitemap!"
     print("  [OK] sitemap.xml verified clean with no localhost or private IPs.")
+
+    # 2.1 Bing Site Auth XML Validation
+    print("\n[*] Validating BingSiteAuth.xml...")
+    bing_res = client.get('/BingSiteAuth.xml')
+    assert bing_res.status_code == 200, "BingSiteAuth.xml returned non-200"
+    bing_xml = bing_res.get_data(as_text=True)
+    assert 'E4F05BA18384A6870ED8DFEA1122335A' in bing_xml, "Missing user token in BingSiteAuth.xml"
+    print("  [OK] BingSiteAuth.xml is valid with correct user verification code.")
 
     # 3. HTML & Meta Validation on Core Pages
     print("\n[*] Validating Metadata, H1 tags, Canonical URLs, and Open Graph on HTML pages...")
