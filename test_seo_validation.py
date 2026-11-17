@@ -39,7 +39,8 @@ def run_seo_tests():
         ('/blog/ppf-vs-lic-guide', 'Blog Detail Page'),
         ('/robots.txt', 'Robots.txt'),
         ('/sitemap.xml', 'XML Sitemap'),
-        ('/BingSiteAuth.xml', 'Bing Site Auth XML')
+        ('/BingSiteAuth.xml', 'Bing Site Auth XML'),
+        ('/e4f05ba18384a6870ed8dfea1122335a.txt', 'IndexNow Verification Key File')
     ]
 
     for path, name in routes_to_test:
@@ -53,8 +54,20 @@ def run_seo_tests():
     robots_text = robots_res.get_data(as_text=True)
     assert 'User-agent: *' in robots_text, "Missing User-agent in robots.txt"
     assert 'Allow: /' in robots_text, "Missing Allow: / in robots.txt"
+    assert 'User-agent: OAI-SearchBot' in robots_text, "Missing OAI-SearchBot in robots.txt"
+    assert 'User-agent: ChatGPT-User' in robots_text, "Missing ChatGPT-User in robots.txt"
+    assert 'User-agent: GPTBot' in robots_text, "Missing GPTBot in robots.txt"
+    assert 'Disallow: /' in robots_text, "Missing Disallow directive for GPTBot in robots.txt"
     assert 'Sitemap: https://aimukeshajmera.vercel.app/sitemap.xml' in robots_text, "Missing sitemap directive in robots.txt"
-    print("  [OK] robots.txt is valid and points to https://aimukeshajmera.vercel.app/sitemap.xml")
+    print("  [OK] robots.txt is valid, supports Google, Bing, OAI-SearchBot, ChatGPT-User, disallows GPTBot, and points to sitemap.")
+
+    # 1.1 IndexNow Key File Validation
+    print("\n[*] Validating IndexNow key file...")
+    in_res = client.get('/e4f05ba18384a6870ed8dfea1122335a.txt')
+    assert in_res.status_code == 200, "IndexNow route returned non-200"
+    in_key = in_res.get_data(as_text=True).strip()
+    assert in_key == 'e4f05ba18384a6870ed8dfea1122335a', f"Unexpected IndexNow key: {in_key}"
+    print("  [OK] IndexNow verification key successfully verified at /e4f05ba18384a6870ed8dfea1122335a.txt")
 
     # 2. Sitemap XML Validation
     print("\n[*] Validating sitemap.xml...")

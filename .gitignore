@@ -32,6 +32,8 @@ wheels/
 .DS_Store
 Thumbs.db
 ~$*
+# Local uploads & images
+pics/
 *.tmp
 
 .vercel

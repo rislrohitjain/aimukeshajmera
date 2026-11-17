@@ -102,6 +102,13 @@ def bing_site_auth():
 </users>"""
     return Response(content, mimetype='text/xml')
 
+@main_bp.route('/<string:key>.txt')
+def indexnow_key_route(key):
+    indexnow_key_val = os.environ.get("INDEXNOW_KEY", "e4f05ba18384a6870ed8dfea1122335a")
+    if key in (indexnow_key_val, "indexnow-key"):
+        return Response(indexnow_key_val, mimetype='text/plain')
+    return ("File not found", 404)
+
 @main_bp.route('/robots.txt')
 def robots_txt():
     content = """User-agent: *
@@ -109,24 +116,20 @@ Allow: /
 Disallow: /admin/
 Disallow: /checkdb
 
+User-agent: Googlebot
+Allow: /
+
 User-agent: Bingbot
 Allow: /
-Disallow: /admin/
-Disallow: /checkdb
 
-User-agent: GPTBot
+User-agent: OAI-SearchBot
 Allow: /
-Disallow: /admin/
-Disallow: /checkdb
 
 User-agent: ChatGPT-User
 Allow: /
 
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
+User-agent: GPTBot
+Disallow: /
 
 Sitemap: https://aimukeshajmera.vercel.app/sitemap.xml
 """

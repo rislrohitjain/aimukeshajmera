@@ -3,23 +3,19 @@ Allow: /
 Disallow: /admin/
 Disallow: /checkdb
 
+User-agent: Googlebot
+Allow: /
+
 User-agent: Bingbot
 Allow: /
-Disallow: /admin/
-Disallow: /checkdb
 
-User-agent: GPTBot
+User-agent: OAI-SearchBot
 Allow: /
-Disallow: /admin/
-Disallow: /checkdb
 
 User-agent: ChatGPT-User
 Allow: /
 
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
+User-agent: GPTBot
+Disallow: /
 
 Sitemap: https://aimukeshajmera.vercel.app/sitemap.xml
