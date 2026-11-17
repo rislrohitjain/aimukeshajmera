@@ -102,6 +102,10 @@ def bing_site_auth():
 </users>"""
     return Response(content, mimetype='text/xml')
 
+@main_bp.route('/google<string:code>.html')
+def google_html_verification(code):
+    return Response(f"google-site-verification: google{code}.html", mimetype='text/html')
+
 @main_bp.route('/<string:key>.txt')
 def indexnow_key_route(key):
     indexnow_key_val = os.environ.get("INDEXNOW_KEY", "e4f05ba18384a6870ed8dfea1122335a")

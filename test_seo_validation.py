@@ -40,7 +40,8 @@ def run_seo_tests():
         ('/robots.txt', 'Robots.txt'),
         ('/sitemap.xml', 'XML Sitemap'),
         ('/BingSiteAuth.xml', 'Bing Site Auth XML'),
-        ('/e4f05ba18384a6870ed8dfea1122335a.txt', 'IndexNow Verification Key File')
+        ('/e4f05ba18384a6870ed8dfea1122335a.txt', 'IndexNow Verification Key File'),
+        ('/googleG8lIFTeS81nHhPiYWLg6ZyNcAij9NoFY-haZ73hxP9Q.html', 'Google Site Verification HTML File')
     ]
 
     for path, name in routes_to_test:
